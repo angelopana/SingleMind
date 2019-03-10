@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/image_logo"
+            android:layout_width="328dp"
+            android:layout_height="187dp"
+            android:src="@drawable/logo" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="52dp"
+            android:layout_marginRight="52dp"
+            android:orientation="vertical">
+
+
+            <Button
+                android:id="@+id/button_facebook"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#3C5A99"
+                android:drawableLeft="@drawable/ic_facebook_24dp"
+                android:paddingLeft="16dp"
+                android:text="@string/login_activity_facebook"
+                android:textColor="#FFFFFF" />
+
+            <Button
+                android:id="@+id/button_google"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="#FFFFFF"
+                android:drawableLeft="@drawable/ic_google_24dp"
+                android:paddingLeft="16dp"
+                android:text="@string/Login_activity_google" />
+
+            <Button
+                android:id="@+id/button_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="#D0021B"
+                android:drawableLeft="@drawable/ic_email_white_24dp"
+                android:paddingLeft="16dp"
+                android:text="@string/login_activity_email"
+                android:textColor="#FFFFFF" />
+
+            <Button
+                android:id="@+id/button_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="#43C5A5"
+                android:drawableLeft="@drawable/ic_phone_white_24dp"
+                android:paddingLeft="16dp"
+                android:text="@string/login_activity_phone"
+                android:textColor="#FFFFFF" />
+
+            <Button
+                android:id="@+id/button_registration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="#6100ED"
+                android:drawableLeft="@drawable/ic_account_box_white_24dp"
+                android:paddingLeft="16dp"
+                android:text="@string/login_activity_create_account"
+                android:textColor="#FFFFFF" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
