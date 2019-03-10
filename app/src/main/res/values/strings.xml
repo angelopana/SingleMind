@@ -9,6 +9,7 @@
     <string name="login_activity_create_account">Create a new account</string>
 
     <!-- Login Activity2-->
+    <string name="login_activity2_error">Error</string>
     <string name="login_activity2_email_hint">email</string>
     <string name="login_activity2_password_hint">password</string>
     <string name="login_activity2_submit">Submit</string>
