@@ -27,7 +27,7 @@ public class CougarCourses {
             //Log messages are displayed by click on the "Run" tab at the bottom of android studios, once the app is in progress.
             Log.i("Starting:","Starting to connect");
 
-            //This sets the connection. We are feeding it the URL being passed from MainActivity, and a valid user and password.
+            //This sets the connection. We are feeding it the login URL and a valid user and password being passed from MainActivity.
             sRes = Jsoup.connect("http://cc.csusm.edu/login/index.php")
                     .data("username", username, "password", password).method(Connection.Method.POST).execute();
 
