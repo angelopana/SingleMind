@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
             //test CC method
             try {
-                test.download("smith635", "yrcOETH2580", sURL);
+                test.download("test", "test", sURL);
             }
             catch (IOException e) {
                 Log.i("IOException:", "IO Exception thrown");
