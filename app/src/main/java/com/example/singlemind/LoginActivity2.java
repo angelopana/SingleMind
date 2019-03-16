@@ -88,6 +88,10 @@ public class LoginActivity2 extends AppCompatActivity {
             mWebservicePG.setVisibility(View.INVISIBLE);
             //Initialize intent
             Intent intObj = new Intent(LoginActivity2.this, MainActivity.class);
+
+            //testing
+            mLoginStatus = true;
+
             //Error status is false
             if(!sErrored){
                 //Based on Boolean value returned from WebService
