@@ -61,14 +61,14 @@ public class CougarCourses {
                 //https://github.com/lengers/MoodleScraper/blob/master/src/com/lengers/moodle/scraper/Scraper.java
                 //This scraper was a designed for a normal Java program environment so I made some quick changes
                 //and removed some of it's features. In the github version it downloads the file directly to the
-                //computer. I don't think we have to download anything, just parse it and then display it to string.
+                //computer. I don't think we have to download anything, just parse it, put in list, and then send back to frontend.
                 //An advanced feature of our app could be the ability to download the schedule but i don't think
                 //we should worry about that now.
 
                 //Testing:
                 //If you build this application and display it in an emulator check the "Run" tab at the bottom
                 //of the screen. This will show you an error log and also the output of the Log.i commands
-                //I embedded to debug this method.
+                //I embedded to debug this method. Note- You will have to click through screens to reach MainActivity before this method is called.
                 //Running this method as-is you can see that it goes to the "Dashboard" URL which I fed from "MainActivity"
                 //and looks for the div class "cardtext content calendarwrapper" and then starts retrieving info from
                 //there. This isn't really what we want to do but it's just a test to show that this method works.
