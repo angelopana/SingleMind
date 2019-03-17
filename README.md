@@ -7,3 +7,5 @@
 -added login logic for email login 3/9/2019 (Evan)
 
 -added core moodle scraping logic. See CougarCourses class. 3/15/2019 (Evan)
+
+-synced firebase authentication, added register activity 3/16/2019 (Evan)
