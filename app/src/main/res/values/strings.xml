@@ -15,4 +15,12 @@
     <string name="login_activity2_submit">Submit</string>
     <string name="login_activity2_password_reset">Forgot Password?</string>
 
+    <!-- Registration Activity -->
+    <string name="reg_activity_title">Register Account</string>
+    <string name="reg_activity_name_hint">name</string>
+    <string name="reg_activity_email_hint">email</string>
+    <string name="reg_activity_password_hint">password</string>
+    <string name="reg_activity_password_hint2">repeat password</string>
+    <string name="reg_activity_submit">Submit</string>
+
 </resources>

@@ -36,25 +36,25 @@
             android:orientation="vertical">
 
 
-            <Button
-                android:id="@+id/button_facebook"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#3C5A99"
-                android:drawableLeft="@drawable/ic_facebook_24dp"
-                android:paddingLeft="16dp"
-                android:text="@string/login_activity_facebook"
-                android:textColor="#FFFFFF" />
+            <!--<Button-->
+                <!--android:id="@+id/button_facebook"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:background="#3C5A99"-->
+                <!--android:drawableLeft="@drawable/ic_facebook_24dp"-->
+                <!--android:paddingLeft="16dp"-->
+                <!--android:text="@string/login_activity_facebook"-->
+                <!--android:textColor="#FFFFFF" />-->
 
-            <Button
-                android:id="@+id/button_google"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="#FFFFFF"
-                android:drawableLeft="@drawable/ic_google_24dp"
-                android:paddingLeft="16dp"
-                android:text="@string/Login_activity_google" />
+            <!--<Button-->
+                <!--android:id="@+id/button_google"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="16dp"-->
+                <!--android:background="#FFFFFF"-->
+                <!--android:drawableLeft="@drawable/ic_google_24dp"-->
+                <!--android:paddingLeft="16dp"-->
+                <!--android:text="@string/Login_activity_google" />-->
 
             <Button
                 android:id="@+id/button_email"
@@ -67,16 +67,16 @@
                 android:text="@string/login_activity_email"
                 android:textColor="#FFFFFF" />
 
-            <Button
-                android:id="@+id/button_phone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="#43C5A5"
-                android:drawableLeft="@drawable/ic_phone_white_24dp"
-                android:paddingLeft="16dp"
-                android:text="@string/login_activity_phone"
-                android:textColor="#FFFFFF" />
+            <!--<Button-->
+                <!--android:id="@+id/button_phone"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="16dp"-->
+                <!--android:background="#43C5A5"-->
+                <!--android:drawableLeft="@drawable/ic_phone_white_24dp"-->
+                <!--android:paddingLeft="16dp"-->
+                <!--android:text="@string/login_activity_phone"-->
+                <!--android:textColor="#FFFFFF" />-->
 
             <Button
                 android:id="@+id/button_registration"

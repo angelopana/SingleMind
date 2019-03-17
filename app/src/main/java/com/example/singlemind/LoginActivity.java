@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.firebase.FirebaseApp;
+
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button mFacebookBtn, mGoogleBtn, mEmailBtn, mPhoneBtn, mRegisterBtn;
@@ -16,37 +18,38 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        FirebaseApp.initializeApp(this);
         init();
     }
 
     private void init() {
         //initialize all buttons
-        mFacebookBtn = findViewById(R.id.button_facebook);
-        mGoogleBtn = findViewById(R.id.button_google);
+//        mFacebookBtn = findViewById(R.id.button_facebook);
+//        mGoogleBtn = findViewById(R.id.button_google);
         mEmailBtn = findViewById(R.id.button_email);
-        mPhoneBtn = findViewById(R.id.button_phone);
+//        mPhoneBtn = findViewById(R.id.button_phone);
         mRegisterBtn = findViewById(R.id.button_registration);
 
         //set button listeners
-        mFacebookBtn.setOnClickListener(this);
-        mGoogleBtn.setOnClickListener(this);
+//        mFacebookBtn.setOnClickListener(this);
+//        mGoogleBtn.setOnClickListener(this);
         mEmailBtn.setOnClickListener(this);
-        mPhoneBtn.setOnClickListener(this);
+//        mPhoneBtn.setOnClickListener(this);
         mRegisterBtn.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch(v.getId()){
-            case R.id.button_facebook: {
-                //implement firebase auth
-                break;
-            }
-
-            case R.id.button_google: {
-                //implement firebase auth
-                break;
-            }
+//            case R.id.button_facebook: {
+//                //implement firebase auth
+//                break;
+//            }
+//
+//            case R.id.button_google: {
+//                //implement firebase auth
+//                break;
+//            }
 
             case R.id.button_email: {
                 //go to email sign-in page
@@ -55,13 +58,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
             }
 
-            case R.id.button_phone: {
-                //implement firebase auth
-                break;
-            }
+//            case R.id.button_phone: {
+//                //implement firebase auth
+//                break;
+//            }
 
             case R.id.button_registration: {
-                //go to registration page
+                Intent intent = new Intent(this, RegistrationActivity.class);
+                startActivity(intent);
                 break;
             }
         }

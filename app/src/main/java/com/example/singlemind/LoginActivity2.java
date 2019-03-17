@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginActivity2 extends AppCompatActivity {
@@ -24,6 +26,7 @@ public class LoginActivity2 extends AppCompatActivity {
     private String mUsername, mPassword;
     private boolean mLoginStatus;
     private static boolean sErrored = false;
+    private FirebaseAuth mAuth;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,9 @@ public class LoginActivity2 extends AppCompatActivity {
 
         //set error text
         mStatusTV.setText("");
+
+        //get instance of Firebase
+        mAuth = FirebaseAuth.getInstance();
     }
 
     public void submitLogin(View view) {
