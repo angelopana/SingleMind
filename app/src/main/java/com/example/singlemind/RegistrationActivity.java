@@ -47,13 +47,6 @@ public class RegistrationActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        //updateUI(currentUser);
-    }
 
     public void accountRegistration (View view){
         //registration logic
@@ -82,14 +75,13 @@ public class RegistrationActivity extends AppCompatActivity {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(RegistrationActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
                         }
 
-                        // ...
                     }
                 });
     }
 
+    //add later if we want to..
     private void sendEmailVerification() {
 
         // Send verification email
@@ -140,10 +132,7 @@ public class RegistrationActivity extends AppCompatActivity {
             mPassword2ET.setError(null);
         }
 
-        if (password.equals(password2)) {
-            sPassword = mPasswordET.getText().toString();
-        }
-        else {
+        if (!password.equals(password2)) {
             mPassword2ET.setError("Did not match.");
             Toast.makeText(RegistrationActivity.this,
                     "Passwords do not match, try again.",
@@ -153,30 +142,13 @@ public class RegistrationActivity extends AppCompatActivity {
         return valid;
     }
 
-//    private void updateUI(FirebaseUser user) {
-//
-//        if (user != null) {
-//            mStatusTextView.setText(getString(R.string.emailpassword_status_fmt,
-//                    user.getEmail(), user.isEmailVerified()));
-//            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
-//
-//            findViewById(R.id.emailPasswordButtons).setVisibility(View.GONE);
-//            findViewById(R.id.emailPasswordFields).setVisibility(View.GONE);
-//            findViewById(R.id.signedInButtons).setVisibility(View.VISIBLE);
-//
-//            findViewById(R.id.verifyEmailButton).setEnabled(!user.isEmailVerified());
-//        } else {
-//            mStatusTextView.setText(R.string.signed_out);
-//            mDetailTextView.setText(null);
-//
-//            findViewById(R.id.emailPasswordButtons).setVisibility(View.VISIBLE);
-//            findViewById(R.id.emailPasswordFields).setVisibility(View.VISIBLE);
-//            findViewById(R.id.signedInButtons).setVisibility(View.GONE);
-//        }
-//    }
+        private void updateUI(FirebaseUser user) {
 
-    private void signOut() {
-        mAuth.signOut();
-        //updateUI(null);
+        if (user != null) {
+            //update for ok
+        } else {
+            //update for fail
+        }
     }
+
 }
