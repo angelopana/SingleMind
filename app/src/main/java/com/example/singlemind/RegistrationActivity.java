@@ -1,6 +1,7 @@
 package com.example.singlemind;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -14,6 +15,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -68,8 +70,8 @@ public class RegistrationActivity extends AppCompatActivity {
                             Log.d(TAG, "createUserWithEmail:success");
                             Intent intent = new Intent(RegistrationActivity.this, LoginActivity2.class);
                             startActivity(intent);
-                            //FirebaseUser user = mAuth.getCurrentUser();
-                            //updateUI(user);
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            updateUserInfo(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -142,10 +144,23 @@ public class RegistrationActivity extends AppCompatActivity {
         return valid;
     }
 
-        private void updateUI(FirebaseUser user) {
+        private void updateUserInfo(FirebaseUser user) {
 
         if (user != null) {
-            //update for ok
+
+            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                    .setDisplayName(mNameET.getText().toString())
+                    .build();
+
+            user.updateProfile(profileUpdates)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Log.d(TAG, "User's name updated.");
+                            }
+                        }
+                    });
         } else {
             //update for fail
         }

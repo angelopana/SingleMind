@@ -1,33 +1,229 @@
 package com.example.singlemind;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.mikepenz.fontawesome_typeface_library.FontAwesome;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 import java.io.IOException;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
-public class MainActivity extends AppCompatActivity {
+
+//implement the interface OnNavigationItemSelectedListener in your activity class
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
     //vars
-    private static String sURL = "https://cc.csusm.edu/my/index.php";
+    private static final String TAG = "MainActivity";
+    private Toolbar toolbar;
+    private BottomNavigationView bottomNavigationView;
+    private Drawer result;
+    private static String sURL = "https://cc.csusm.edu/calendar/view.php?view=month&time=";
     private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
+    private String mName, mEmail;
+    private Uri mPhotoUrl;
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        init();
+        initNavMenu();
+    }
+
+    private void init() {
+        HomeFragment fragment = new HomeFragment();
+        doNormalFragmentTransaction(fragment, getString(R.string.fragmentHome), false);
+
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
         AsyncCallWS test = new AsyncCallWS();
         test.execute();
-
-
         mAuth = FirebaseAuth.getInstance();
+
+        mUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (mUser != null) {
+            mName = mUser.getDisplayName();
+            mEmail = mUser.getEmail();
+        }
+
+        toolbar = findViewById(R.id.topAppBar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.actionbar, menu);
+
+        return true;
+    }
+
+
+    private void initNavMenu() {
+        new DrawerBuilder().withActivity(this).build();
+
+        //if you want to update the items at a later time it is recommended to keep it in a variable
+        PrimaryDrawerItem home = new PrimaryDrawerItem().withIdentifier(1).withIcon(FontAwesome.Icon.faw_calendar).withName(R.string.drawer_home);
+
+        SecondaryDrawerItem settings = new SecondaryDrawerItem().withIdentifier(7).withIcon(GoogleMaterial.Icon.gmd_settings).withName(R.string.drawer_settings);
+        SecondaryDrawerItem privacy = new SecondaryDrawerItem().withIdentifier(9).withIcon(GoogleMaterial.Icon.gmd_security).withName(R.string.drawer_privacy);
+        SecondaryDrawerItem contact = new SecondaryDrawerItem().withIdentifier(10).withIcon(GoogleMaterial.Icon.gmd_contact_mail).withName(R.string.drawer_contact);
+        SecondaryDrawerItem rate = new SecondaryDrawerItem().withIdentifier(11).withIcon(GoogleMaterial.Icon.gmd_star).withName(R.string.drawer_rate);
+
+
+        //create account header
+        AccountHeader headerResult = new AccountHeaderBuilder()
+                .withActivity(this)
+//                 .withHeaderBackground(R.drawable.wood_header)
+                .addProfiles(
+                        new ProfileDrawerItem().withName(mEmail).withEmail(mEmail).withIcon(getResources().getDrawable(R.drawable.duck))
+                )
+                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                    @Override
+                    public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
+                        return false;
+                    }
+                })
+                .build();
+
+        //create the drawer and remember the `Drawer` result object
+        result = new DrawerBuilder()
+                .withActivity(this)
+                .withToolbar(toolbar)
+                .withAccountHeader(headerResult)
+                .addDrawerItems(
+                        home,
+                        new DividerDrawerItem(),
+                        settings, privacy, contact, rate
+
+                )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        if (position == 1) {
+//                            result.closeDrawer();
+
+                        }
+                        return true;
+                    }
+                })
+                .withOnDrawerNavigationListener(new Drawer.OnDrawerNavigationListener() {
+                    @Override
+                    public boolean onNavigationClickListener(View clickedView) {
+                        onBackPressed();
+                        return true;
+                    }
+                })
+                .build();
+
+    }
+
+    //set back arrow for appbar
+    public void setActionBarArrow() {
+        result.getActionBarDrawerToggle().setDrawerIndicatorEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    public void setHamburgerIcon() {
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        result.getActionBarDrawerToggle().setDrawerIndicatorEnabled(true);
+    }
+
+    //this if for the appbar
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item ) {
+        Fragment fragment = null;
+
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        //handle the back press :D close the drawer first and if the drawer is closed close the activity
+        if (result != null && result.isDrawerOpen()) {
+            result.closeDrawer();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+
+    public void doNormalFragmentTransaction(Fragment fragment, String tag, boolean addToBackStack){
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        transaction.replace(R.id.fragment_container, fragment, tag);
+
+        if(addToBackStack){
+            transaction.addToBackStack(tag);
+        }
+        transaction.commit();
+    }
+
+
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Fragment fragment = null;
+
+        switch (item.getItemId()) {
+            case R.id.navigation_home:
+                fragment = new HomeFragment();
+                doNormalFragmentTransaction(fragment, getString(R.string.fragmentHome), false);
+                return true;
+
+        }
+
+        return false;
     }
 
     @Override
@@ -53,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
 
             //test CC method
             try {
-                test.download("test", "test", sURL);
+                test.download("smith635", "yrcOEHT2580", sURL);
             }
             catch (IOException e) {
                 Log.i("IOException:", "IO Exception thrown");
@@ -80,3 +276,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
+

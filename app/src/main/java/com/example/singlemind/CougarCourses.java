@@ -9,6 +9,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -29,26 +30,38 @@ public class CougarCourses {
 
             //This sets the connection. We are feeding it the login URL and a valid user and password being passed from MainActivity.
             sRes = Jsoup.connect("http://cc.csusm.edu/login/index.php")
-                    .data("username", username, "password", password).method(Connection.Method.POST).execute();
+                    .data("username", username, "password", password)
+                    .method(Connection.Method.POST)
+                    .execute();
 
             // This will get you cookies, which we need to maintain our connection as we follow links.
             Map<String, String> loginCookies = sRes.cookies();
 
-            // https://cc.csusm.edu/my/index.php is the URL being fed into this method for testing purposes.
-            //test connection to Dashboard URL
+            //get timestamp for calendar
+            Long tsLong = System.currentTimeMillis()/1000;
+            String timestamp = tsLong.toString();
+            url = url + timestamp;
+
+            Log.i("Timestamp:", timestamp);
+            Log.i("URL:", url);
+
             Document doc = Jsoup.connect(url).cookies(loginCookies).get();
+
+            Log.i("Finish Status: ", "Able to parse from URL provided");
+
 
             //This is the beginning of the parsing. Easiest way to do this is view the page source of whatever
             //page you are parsing in a browser and look for what tags preceed the needed information.
-            Elements topicData = doc.select("div[class=\"card-text content calendarwrapper\"]");
-            Element first = topicData.iterator().next();
-            for (Iterator<Element> topicIterator = topicData.iterator(); topicIterator.hasNext();) {
-                Element answer = topicIterator.next();
-                if (answer == first) {
-                    String stringAnswer = answer.toString().substring(0, 31) + "### "
-                            + answer.toString().substring(31);
-                    Log.i("docParse:", stringAnswer);
-                }
+//            Elements topicData = doc.select("div[class=\"card-text content calendarwrapper\"]");
+//            Element first = topicData.iterator().next();
+//
+//            for (Iterator<Element> topicIterator = topicData.iterator(); topicIterator.hasNext();) {
+//                Element answer = topicIterator.next();
+//                if (answer == first) {
+//                    String stringAnswer = answer.toString().substring(0, 31) + "### "
+//                            + answer.toString().substring(31);
+//                    Log.i("docParse:", stringAnswer);
+//                }
 
                 //TODO finish the parsing algorithm and retrieve calendar in consumable format.
                 //Note- The Calendar assignments can be put in either a Hash Map or ArrayList for me
@@ -74,8 +87,6 @@ public class CougarCourses {
                 //there. This isn't really what we want to do but it's just a test to show that this method works.
 
                 //Hope this helps guys. Evan
-
-
 
 
 //            for (Iterator<Element> iterator = links.iterator(); iterator.hasNext();) {
@@ -126,8 +137,6 @@ public class CougarCourses {
 //            }
                 //printStream.close();
 
-            }
-            Log.i("Finish Status: ", "Able to parse from URL provided");
 
             // System.out.println(links);
         } catch (IOException e) {
