@@ -3,6 +3,7 @@
 
     <!--Fragment Tags-->
     <string name="fragmentHome">fragHome</string>
+    <string name="fragmentEvents">fragEvents</string>
 
     <!-- Login Activity-->
     <string name="login_activity_facebook">Sign in with Facebook</string>

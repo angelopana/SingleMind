@@ -12,7 +12,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
@@ -34,12 +36,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 
-//implement the interface OnNavigationItemSelectedListener in your activity class
-public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity {
 
     //vars
     private static final String TAG = "MainActivity";
     private Toolbar toolbar;
+    private BottomAppBar bottomAppBar;
+    private FloatingActionButton floatingActionButton;
     private BottomNavigationView bottomNavigationView;
     private Drawer result;
     private static String sURL = "https://cc.csusm.edu/calendar/view.php?view=month&time=";
@@ -65,16 +68,18 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        bottomAppBar = findViewById(R.id.bottom_app_bar);
+        floatingActionButton = findViewById(R.id.fab);
+
         init();
         initNavMenu();
+
     }
 
     private void init() {
         HomeFragment fragment = new HomeFragment();
         doNormalFragmentTransaction(fragment, getString(R.string.fragmentHome), false);
 
-        bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
         AsyncCallWS test = new AsyncCallWS();
         test.execute();
@@ -86,8 +91,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             mEmail = mUser.getEmail();
         }
 
-        toolbar = findViewById(R.id.topAppBar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(bottomAppBar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
     }
@@ -95,8 +99,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.actionbar, menu);
-
+        getMenuInflater().inflate(R.menu.bottom_bar, menu);
         return true;
     }
 
@@ -104,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private void initNavMenu() {
         new DrawerBuilder().withActivity(this).build();
 
-        //if you want to update the items at a later time it is recommended to keep it in a variable
         PrimaryDrawerItem home = new PrimaryDrawerItem().withIdentifier(1).withIcon(FontAwesome.Icon.faw_calendar).withName(R.string.drawer_home);
 
         SecondaryDrawerItem settings = new SecondaryDrawerItem().withIdentifier(7).withIcon(GoogleMaterial.Icon.gmd_settings).withName(R.string.drawer_settings);
@@ -131,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         //create the drawer and remember the `Drawer` result object
         result = new DrawerBuilder()
                 .withActivity(this)
-                .withToolbar(toolbar)
+                .withToolbar(bottomAppBar)
                 .withAccountHeader(headerResult)
                 .addDrawerItems(
                         home,
@@ -171,17 +173,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         result.getActionBarDrawerToggle().setDrawerIndicatorEnabled(true);
     }
 
-    //this if for the appbar
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item ) {
-        Fragment fragment = null;
-
         switch (item.getItemId()) {
 
-            case android.R.id.home:
-                onBackPressed();
+            case R.id.navigation_search:
+//                onBackPressed();
                 return true;
-
         }
 
         return super.onOptionsItemSelected(item);
@@ -209,22 +208,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         transaction.commit();
     }
 
-
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        Fragment fragment = null;
-
-        switch (item.getItemId()) {
-            case R.id.navigation_home:
-                fragment = new HomeFragment();
-                doNormalFragmentTransaction(fragment, getString(R.string.fragmentHome), false);
-                return true;
-
-        }
-
-        return false;
-    }
 
     @Override
     public void onStart() {
