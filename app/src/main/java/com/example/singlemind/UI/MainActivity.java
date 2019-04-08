@@ -1,4 +1,4 @@
-package com.example.singlemind;
+package com.example.singlemind.UI;
 
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -12,6 +12,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.singlemind.Controller.CougarCourses;
+import com.example.singlemind.R;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;

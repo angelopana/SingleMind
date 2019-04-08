@@ -1,11 +1,11 @@
-package com.example.singlemind;
+package com.example.singlemind.Model;
 
 public class Event {
 
     private String mEventType, mEventTime, mEventName, mEventContent;
 
     //constructor
-    Event(String eventType, String eventTime, String eventName, String eventContent) {
+    public Event(String eventType, String eventTime, String eventName, String eventContent) {
         mEventType = eventType;
         mEventTime = eventTime;
         mEventName = eventName;

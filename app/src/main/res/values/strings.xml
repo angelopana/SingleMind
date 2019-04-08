@@ -9,8 +9,11 @@
     <string name="login_activity_facebook">Sign in with Facebook</string>
     <string name="Login_activity_google">Sign in with Google</string>
     <string name="login_activity_email">Sign in with email</string>
-    <string name="login_activity_phone">Sign in with phone</string>
+    <string name="login_activity_anon">Sign in anonymously</string>
     <string name="login_activity_create_account">Create a new account</string>
+    <string name="facebook_app_id">1210018895841559</string>
+    <string name="fb_login_protocol_scheme">fb1210018895841559</string>
+    <string name="google_app_client_id">1051419676916-06dld16mcorrbfco0gd31svn6p578jjd.apps.googleusercontent.com</string>
 
     <!-- Login Activity2-->
     <string name="login_activity2_error">Error</string>

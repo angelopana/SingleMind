@@ -1,4 +1,4 @@
-package com.example.singlemind;
+package com.example.singlemind.Controller;
 
 import android.util.Log;
 

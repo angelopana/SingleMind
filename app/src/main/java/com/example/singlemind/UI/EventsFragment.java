@@ -1,4 +1,4 @@
-package com.example.singlemind;
+package com.example.singlemind.UI;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,12 +9,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.applandeo.materialcalendarview.CalendarView;
-import com.applandeo.materialcalendarview.EventDay;
-import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
+import com.example.singlemind.Adapter.CalendarAdapter;
+import com.example.singlemind.Model.Event;
+import com.example.singlemind.R;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -23,10 +22,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class HomeFragment extends Fragment implements View.OnClickListener {
+public class EventsFragment extends Fragment implements View.OnClickListener {
 
-    private List<EventDay> events = new ArrayList<>();
-    private CalendarView calendarView;
+    private List<Event> recyclerEvents = new ArrayList<>();
+    private RecyclerView calendarRecycler;
+    private CalendarAdapter calendarAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,31 +37,31 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_home, container, false);
+        View v = inflater.inflate(R.layout.fragment_events, container, false);
 
-        initCalendar(v);
+        init(v);
+        initEvents();
 
-        calendarView.setOnDayClickListener(new OnDayClickListener() {
-            @Override
-            public void onDayClick(EventDay eventDay) {
-                Calendar clickedDayCalendar = eventDay.getCalendar();
-                EventsFragment fragment = new EventsFragment();
-                ((MainActivity)getActivity()).doNormalFragmentTransaction(fragment, getString(R.string.fragmentEvents), false);
-            }
-        });
+        calendarAdapter = new CalendarAdapter(recyclerEvents);
+        calendarRecycler.setAdapter(calendarAdapter);
+
         return v;
     }
 
+    public void init(View view) {
 
-    public void initCalendar(View view) {
+        calendarRecycler = view.findViewById(R.id.recycler_calendar);
+        LinearLayoutManager llm = new LinearLayoutManager(getContext());
+        calendarRecycler.setLayoutManager(llm);
 
-        Calendar calendar = Calendar.getInstance();
-        events.add(new EventDay(calendar, R.drawable.ic_dot));
-
-        calendarView = view.findViewById(R.id.calendarView);
-        calendarView.setEvents(events);
     }
 
+    private void initEvents() {
+        recyclerEvents.add(new Event("Homework", "8:00am", "Homework2a", "long string"));
+        recyclerEvents.add(new Event("Homework", "9:00am", "Homework2b", "long string"));
+        recyclerEvents.add(new Event("Homework", "10:00am", "Homework2c", "long string"));
+        recyclerEvents.add(new Event("Homework", "11:00am", "Homework2d", "long string"));
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -82,7 +82,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
             //case R.id.navigation_share:
 
-                //return true;
+            //return true;
 
         }
 

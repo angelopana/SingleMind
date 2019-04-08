@@ -1,9 +1,12 @@
-package com.example.singlemind;
+package com.example.singlemind.Adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.singlemind.Model.Event;
+import com.example.singlemind.R;
 
 import java.util.List;
 
@@ -29,7 +32,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.EventV
         }
     }
 
-    CalendarAdapter(List<Event> events) {
+    public CalendarAdapter(List<Event> events) {
         recyclerEvents = events;
     }
 
