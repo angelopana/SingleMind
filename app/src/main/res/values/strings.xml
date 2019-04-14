@@ -4,6 +4,7 @@
     <!--Fragment Tags-->
     <string name="fragmentHome">fragHome</string>
     <string name="fragmentEvents">fragEvents</string>
+    <string name="fragmentImport">fragImport</string>
 
     <!-- Login Activity-->
     <string name="login_activity_facebook">Sign in with Facebook</string>
@@ -34,11 +35,15 @@
     <string name="main_activity_home">Home</string>
     <string name="main_activity_dashboard">Dashboard</string>
     <string name="sub_share_menu">Share</string>
-    
+
     <!--Drawer Activity-->
     <string name="drawer_home">Home</string>
+    <string name="drawer_import">Import</string>
     <string name="drawer_privacy">Privacy</string>
     <string name="drawer_contact">Contact the developers</string>
     <string name="drawer_settings">Settings</string>
     <string name="drawer_rate">Rate app</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

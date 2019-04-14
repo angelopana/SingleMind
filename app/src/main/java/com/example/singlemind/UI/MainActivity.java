@@ -12,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.example.singlemind.Controller.CougarCourses;
 import com.example.singlemind.R;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -110,6 +109,8 @@ public class MainActivity extends AppCompatActivity {
         new DrawerBuilder().withActivity(this).build();
 
         PrimaryDrawerItem home = new PrimaryDrawerItem().withIdentifier(1).withIcon(FontAwesome.Icon.faw_calendar).withName(R.string.drawer_home);
+        PrimaryDrawerItem importICS = new PrimaryDrawerItem().withIdentifier(1).withIcon(FontAwesome.Icon.faw_file_import).withName(R.string.drawer_import);
+
 
         SecondaryDrawerItem settings = new SecondaryDrawerItem().withIdentifier(7).withIcon(GoogleMaterial.Icon.gmd_settings).withName(R.string.drawer_settings);
         SecondaryDrawerItem privacy = new SecondaryDrawerItem().withIdentifier(9).withIcon(GoogleMaterial.Icon.gmd_security).withName(R.string.drawer_privacy);
@@ -138,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
                 .withToolbar(bottomAppBar)
                 .withAccountHeader(headerResult)
                 .addDrawerItems(
-                        home,
+                        home, importICS,
                         new DividerDrawerItem(),
                         settings, privacy, contact, rate
 
@@ -146,10 +147,18 @@ public class MainActivity extends AppCompatActivity {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        if (position == 1) {
-//                            result.closeDrawer();
-
+                        switch (position) {
+                            case 1:
+                                HomeFragment homeFragment = new HomeFragment();
+                                doNormalFragmentTransaction(homeFragment, getString(R.string.fragmentHome), true);
+                                break;
+                            case 2:
+                                ImportFragment importFragment = new ImportFragment();
+                                doNormalFragmentTransaction(importFragment, getString(R.string.fragmentImport), true);
+                                break;
                         }
+
+
                         return true;
                     }
                 })
@@ -229,16 +238,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(String... params) {
             //Call Web Method
-
-            CougarCourses test = new CougarCourses();
-
-            //test CC method
-            try {
-                test.download("smith635", "yrcOEHT2580", sURL);
-            }
-            catch (IOException e) {
-                Log.i("IOException:", "IO Exception thrown");
-            }
 
             return null;
         }
