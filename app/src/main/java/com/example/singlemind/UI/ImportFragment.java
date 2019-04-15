@@ -14,7 +14,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.singlemind.ImportUtil;
 import com.example.singlemind.R;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -127,8 +134,16 @@ public class ImportFragment extends Fragment implements View.OnClickListener {
             Uri uri = null;
             if (resultData != null) {
                 uri = resultData.getData();
-                Log.i(TAG, "Uri: " + uri.toString());
+                try {
+                    String test = new ImportUtil().readTextFromUri(getContext(), uri);
+                    Log.i(TAG, test);
+                }
+                catch (IOException e) {
+                    e.getStackTrace();
+                }
             }
         }
     }
+
+
 }
