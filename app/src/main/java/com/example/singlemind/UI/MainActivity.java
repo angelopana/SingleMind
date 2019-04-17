@@ -1,10 +1,12 @@
 package com.example.singlemind.UI;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -34,24 +36,26 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import java.io.IOException;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    //vars
-    private static final String TAG = "MainActivity";
+    //widgets
     private Toolbar toolbar;
     private BottomAppBar bottomAppBar;
-    private FloatingActionButton floatingActionButton;
-    private BottomNavigationView bottomNavigationView;
     private Drawer result;
-    private static String sURL = "https://cc.csusm.edu/calendar/view.php?view=month&time=";
+    private FloatingActionButton fab;
+
+    //vars
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
     private String mName, mEmail;
     private Uri mPhotoUrl;
 
+    //const
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -70,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         bottomAppBar = findViewById(R.id.bottom_app_bar);
-        floatingActionButton = findViewById(R.id.fab);
+        fab = findViewById(R.id.fab);
 
         init();
         initNavMenu();
@@ -81,9 +85,6 @@ public class MainActivity extends AppCompatActivity {
         HomeFragment fragment = new HomeFragment();
         doNormalFragmentTransaction(fragment, getString(R.string.fragmentHome), false);
 
-
-        AsyncCallWS test = new AsyncCallWS();
-        test.execute();
         mAuth = FirebaseAuth.getInstance();
 
         mUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -94,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(bottomAppBar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
     }
 
     @Override
@@ -109,14 +109,14 @@ public class MainActivity extends AppCompatActivity {
         new DrawerBuilder().withActivity(this).build();
 
         PrimaryDrawerItem home = new PrimaryDrawerItem().withIdentifier(1).withIcon(FontAwesome.Icon.faw_calendar).withName(R.string.drawer_home);
-        PrimaryDrawerItem importICS = new PrimaryDrawerItem().withIdentifier(1).withIcon(FontAwesome.Icon.faw_file_import).withName(R.string.drawer_import);
+        PrimaryDrawerItem importICS = new PrimaryDrawerItem().withIdentifier(2).withIcon(FontAwesome.Icon.faw_file_import).withName(R.string.drawer_import);
 
+        SecondaryDrawerItem settings = new SecondaryDrawerItem().withIdentifier(3).withIcon(GoogleMaterial.Icon.gmd_settings).withName(R.string.drawer_settings);
+        SecondaryDrawerItem privacy = new SecondaryDrawerItem().withIdentifier(4).withIcon(GoogleMaterial.Icon.gmd_security).withName(R.string.drawer_privacy);
+        SecondaryDrawerItem contact = new SecondaryDrawerItem().withIdentifier(5).withIcon(GoogleMaterial.Icon.gmd_contact_mail).withName(R.string.drawer_contact);
+        SecondaryDrawerItem rate = new SecondaryDrawerItem().withIdentifier(6).withIcon(GoogleMaterial.Icon.gmd_star).withName(R.string.drawer_rate);
 
-        SecondaryDrawerItem settings = new SecondaryDrawerItem().withIdentifier(7).withIcon(GoogleMaterial.Icon.gmd_settings).withName(R.string.drawer_settings);
-        SecondaryDrawerItem privacy = new SecondaryDrawerItem().withIdentifier(9).withIcon(GoogleMaterial.Icon.gmd_security).withName(R.string.drawer_privacy);
-        SecondaryDrawerItem contact = new SecondaryDrawerItem().withIdentifier(10).withIcon(GoogleMaterial.Icon.gmd_contact_mail).withName(R.string.drawer_contact);
-        SecondaryDrawerItem rate = new SecondaryDrawerItem().withIdentifier(11).withIcon(GoogleMaterial.Icon.gmd_star).withName(R.string.drawer_rate);
-
+        SecondaryDrawerItem logout = new SecondaryDrawerItem().withIdentifier(7).withIcon(FontAwesome.Icon.faw_sign_out_alt).withName(R.string.sign_out);
 
         //create account header
         AccountHeader headerResult = new AccountHeaderBuilder()
@@ -141,8 +141,9 @@ public class MainActivity extends AppCompatActivity {
                 .addDrawerItems(
                         home, importICS,
                         new DividerDrawerItem(),
-                        settings, privacy, contact, rate
-
+                        settings, privacy, contact, rate,
+                        new DividerDrawerItem(),
+                        logout
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -151,10 +152,19 @@ public class MainActivity extends AppCompatActivity {
                             case 1:
                                 HomeFragment homeFragment = new HomeFragment();
                                 doNormalFragmentTransaction(homeFragment, getString(R.string.fragmentHome), true);
+                                result.closeDrawer();
                                 break;
                             case 2:
                                 ImportFragment importFragment = new ImportFragment();
                                 doNormalFragmentTransaction(importFragment, getString(R.string.fragmentImport), true);
+                                result.closeDrawer();
+                                break;
+                            case 9:
+                                mAuth.getInstance().signOut();
+                                Log.i("LOG", "Signed out");
+                                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                                result.closeDrawer();
                                 break;
                         }
 
@@ -182,6 +192,12 @@ public class MainActivity extends AppCompatActivity {
     public void setHamburgerIcon() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         result.getActionBarDrawerToggle().setDrawerIndicatorEnabled(true);
+    }
+
+    public void addEvent(View view){
+
+        AddEventDialog dialog = AddEventDialog.newInstance();
+        dialog.show(getSupportFragmentManager(), "MyDialogFragment");
     }
 
 
@@ -228,36 +244,5 @@ public class MainActivity extends AppCompatActivity {
         //updateUI(currentUser);
     }
 
-    private void signOut() {
-        mAuth.signOut();
-        //updateUI(null);
-    }
-
-    private class AsyncCallWS extends AsyncTask<String, Void, Void> {
-
-        @Override
-        protected Void doInBackground(String... params) {
-            //Call Web Method
-
-            return null;
-        }
-
-        @Override
-        //Once WebService returns response
-        protected void onPostExecute(Void result) {
-            //do something
-        }
-
-        @Override
-
-        protected void onPreExecute() {
-            //do something
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            //do something
-        }
-    }
 }
 
