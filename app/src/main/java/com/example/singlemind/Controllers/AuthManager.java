@@ -1,4 +1,4 @@
-package com.example.singlemind;
+package com.example.singlemind.Controllers;
 
 public class AuthManager {
 

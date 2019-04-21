@@ -1,8 +1,17 @@
-package com.example.singlemind;
+package com.example.singlemind.Controllers;
+
+import android.util.Log;
+
+import com.example.singlemind.Model.Event;
+
+import java.util.ArrayList;
 
 public class ICSManager {
 
     private static ICSManager sSoleInstance;
+    private ArrayList<Event> mEvents = new ArrayList<>();
+
+    private static final String TAG = "ICSManager";
 
     private ICSManager(){}  //private constructor.
 
@@ -17,4 +26,5 @@ public class ICSManager {
     public void buildEventFromICS() {
         //
     }
+
 }

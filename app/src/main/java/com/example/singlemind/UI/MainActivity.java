@@ -2,11 +2,9 @@ package com.example.singlemind.UI;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -16,7 +14,6 @@ import android.view.View;
 
 import com.example.singlemind.R;
 import com.google.android.material.bottomappbar.BottomAppBar;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,10 +30,7 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
-import java.io.IOException;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 

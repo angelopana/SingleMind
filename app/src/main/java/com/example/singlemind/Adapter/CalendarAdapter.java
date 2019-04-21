@@ -46,10 +46,10 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.EventV
 
     @Override
     public void onBindViewHolder(@NonNull CalendarAdapter.EventViewHolder holder, int position) {
-        holder.mEventName.setText(recyclerEvents.get(position).getmEventName());
-        holder.mEventType.setText(recyclerEvents.get(position).getmEventType());
-        holder.mEventTime.setText(recyclerEvents.get(position).getmEventTime());
-        holder.mEventContent.setText(recyclerEvents.get(position).getmEventContent());
+//        holder.mEventName.setText(recyclerEvents.get(position).getmEventName());
+//        holder.mEventType.setText(recyclerEvents.get(position).getmEventType());
+       // holder.mEventTime.setText(recyclerEvents.get(position).getmEventTime());
+        //holder.mEventContent.setText(recyclerEvents.get(position).getmEventContent());
     }
 
     @Override

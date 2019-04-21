@@ -1,6 +1,5 @@
 package com.example.singlemind.UI;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -14,14 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.example.singlemind.ImportUtil;
+import com.example.singlemind.Utility.ImportUtil;
 import com.example.singlemind.R;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

@@ -12,15 +12,18 @@
         <item name="android:windowNoTitle">true</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorPrimary">@color/colorPrimary</item>
-
-        <!-- Set this to true if you want Full Screen without status bar -->
         <item name="android:windowFullscreen">false</item>
-
         <item name="android:windowIsFloating">false</item>
-
         <!-- This is important! Don't forget to set window background -->
         <!--<item name="android:windowBackground">@color/md_white_1000</item>-->
+    </style>
 
+    <style name="TimePickerTheme" parent="Theme.MaterialComponents.Dialog">
+        <item name="colorSecondary">@color/colorPrimary</item>
+        <item name="android:windowBackground">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
 </resources>

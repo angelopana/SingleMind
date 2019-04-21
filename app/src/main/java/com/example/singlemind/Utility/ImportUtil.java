@@ -1,4 +1,4 @@
-package com.example.singlemind;
+package com.example.singlemind.Utility;
 
 import android.content.Context;
 import android.net.Uri;
@@ -12,7 +12,7 @@ public class ImportUtil {
 
     public ImportUtil(){}
 
-    private final static String TAG = "com.example.singlemind.ImportUtil";
+    private final static String TAG = "com.example.singlemind.Utility.ImportUtil";
 
     public String readTextFromUri(Context context, Uri uri) throws IOException {
         InputStream inputStream = context.getContentResolver().openInputStream(uri);

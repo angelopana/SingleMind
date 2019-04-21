@@ -57,10 +57,10 @@ public class EventsFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initEvents() {
-        recyclerEvents.add(new Event("Homework", "8:00am", "Homework2a", "long string"));
-        recyclerEvents.add(new Event("Homework", "9:00am", "Homework2b", "long string"));
-        recyclerEvents.add(new Event("Homework", "10:00am", "Homework2c", "long string"));
-        recyclerEvents.add(new Event("Homework", "11:00am", "Homework2d", "long string"));
+//        recyclerEvents.add(new Event("Homework", 8, "Homework2a", "long string"));
+//        recyclerEvents.add(new Event("Homework", 8, "Homework2b", "long string"));
+//        recyclerEvents.add(new Event("Homework", 8, "Homework2c", "long string"));
+//        recyclerEvents.add(new Event("Homework", 8, "Homework2d", "long string"));
     }
 
     @Override
@@ -96,4 +96,6 @@ public class EventsFragment extends Fragment implements View.OnClickListener {
 
         }
     }
+
+
 }

@@ -1,31 +1,40 @@
 package com.example.singlemind.Model;
 
+import java.util.Calendar;
+
 public class Event {
 
-    private String mEventType, mEventTime, mEventName, mEventContent;
+    private String mEventName, mEventDescription;
+    private String mEventTime;
+    private int mEventType;
+    private long mEventUID;
 
     //constructor
-    public Event(String eventType, String eventTime, String eventName, String eventContent) {
+    public Event(){}
+
+    //title, type, time, description, UID
+    public Event(String eventName, int eventType, String eventTime, String eventDescription, long eventUID) {
         mEventType = eventType;
         mEventTime = eventTime;
         mEventName = eventName;
-        mEventContent = eventContent;
+        mEventDescription = eventDescription;
+        mEventUID = eventUID;
     }
 
-    public String getmEventType() {
+    public long getmEventUID() {
+        return mEventUID;
+    }
+
+    public void setmEventUID(long mEventUID) {
+        this.mEventUID = mEventUID;
+    }
+
+    public int getmEventType() {
         return mEventType;
     }
 
-    public void setmEventType(String mEventType) {
+    public void setmEventType(int mEventType) {
         this.mEventType = mEventType;
-    }
-
-    public String getmEventTime() {
-        return mEventTime;
-    }
-
-    public void setmEventTime(String mEventTime) {
-        this.mEventTime = mEventTime;
     }
 
     public String getmEventName() {
@@ -36,11 +45,19 @@ public class Event {
         this.mEventName = mEventName;
     }
 
-    public String getmEventContent() {
-        return mEventContent;
+    public String getmEventDescription() {
+        return mEventDescription;
     }
 
-    public void setmEventContent(String mEventContent) {
-        this.mEventContent = mEventContent;
+    public void setmEventDescription(String mEventDescription) {
+        this.mEventDescription = mEventDescription;
+    }
+
+    public String getmEventTime() {
+        return mEventTime;
+    }
+
+    public void setmEventTime(String mEventTime) {
+        this.mEventTime = mEventTime;
     }
 }

@@ -11,7 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.singlemind.DBManager;
+import com.example.singlemind.Controllers.DBManager;
 import com.example.singlemind.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -87,7 +87,7 @@ public class LoginActivity2 extends AppCompatActivity {
                             mWebservicePG.setVisibility(View.INVISIBLE);
                             Log.d(TAG, "signInWithEmail:success");
 
-                            DBManager.getInstance().addNewContract(mAuth.getCurrentUser());
+                          //  DBManager.getInstance().addNewContract(mAuth.getCurrentUser());
 
                             Intent intent = new Intent(LoginActivity2.this, MainActivity.class);
                             startActivity(intent);

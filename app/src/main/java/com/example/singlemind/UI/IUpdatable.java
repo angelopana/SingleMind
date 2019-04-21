@@ -1,4 +1,4 @@
-package com.example.singlemind;
+package com.example.singlemind.UI;
 
 public interface IUpdatable {
     void onUpdateSuccess();

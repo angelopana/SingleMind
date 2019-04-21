@@ -2,6 +2,7 @@ package com.example.singlemind.UI;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,7 +13,15 @@ import android.view.ViewGroup;
 import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
+import com.example.singlemind.Controllers.DBManager;
+import com.example.singlemind.Controllers.ICSManager;
+import com.example.singlemind.FlagEvent;
+import com.example.singlemind.Model.Event;
 import com.example.singlemind.R;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,8 +33,11 @@ import androidx.fragment.app.Fragment;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
-    private List<EventDay> events = new ArrayList<>();
-    private CalendarView calendarView;
+    private List<EventDay> mEvents = new ArrayList<>();
+    private ArrayList<Event> e = new ArrayList<>();
+    private CalendarView mCalendarView;
+
+    private static final String TAG = "HomeFragment";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,7 +52,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         initCalendar(v);
 
-        calendarView.setOnDayClickListener(new OnDayClickListener() {
+        mCalendarView.setOnDayClickListener(new OnDayClickListener() {
             @Override
             public void onDayClick(EventDay eventDay) {
                 Calendar clickedDayCalendar = eventDay.getCalendar();
@@ -55,16 +67,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void initCalendar(View view) {
 
         Calendar calendar = Calendar.getInstance();
-        events.add(new EventDay(calendar, R.drawable.ic_dot));
+        mEvents.add(new EventDay(calendar, R.drawable.ic_dot));
 
-        calendarView = view.findViewById(R.id.calendarView);
-        calendarView.setEvents(events);
+        mCalendarView = view.findViewById(R.id.calendarView);
+        mCalendarView.setEvents(mEvents);
     }
 
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -94,5 +107,39 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
 
         }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(FlagEvent event){
+        //retrieve info from dialog
+        Log.i(TAG, "Subscriber heard you loud and clear");
+        if (event.getFlag()) {
+            DBManager.getInstance().getEvents(new IFiretoreObjectListener() {
+                @Override
+                public void onRetrievalSuccess(Object object) {
+                    mEvents = (List<EventDay>) object;
+                    //updateUI
+                    mCalendarView.setEvents(mEvents);
+                }
+
+                @Override
+                public void onRetrievalFailure() {
+
+                }
+            });
+
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        EventBus.getDefault().unregister(this);
     }
 }

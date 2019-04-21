@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.singlemind.DBManager;
+import com.example.singlemind.Controllers.DBManager;
 import com.example.singlemind.R;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -138,7 +138,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             Log.d(TAG, "signInWithCredential:success");
 
                             FirebaseUser user = mAuth.getCurrentUser();
-                            DBManager.getInstance().addNewContract(user);
+//                            DBManager.getInstance().addNewContract(user);
                             //updateUI(user);
 
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -170,7 +170,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            DBManager.getInstance().addNewContract(mAuth.getCurrentUser());
+                            //DBManager.getInstance().addNewContract(mAuth.getCurrentUser());
 
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
