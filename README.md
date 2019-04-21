@@ -12,13 +12,9 @@
 
 -added event activiies, Firestore, refactored design scheme, added ICS import 4/14/2019 (Evan)
 
-TODO:
+-refactored to MVC, custom event stored to firebase and displayed in View. 4/21/2019 (Evan)
 
-  Refactor to MVC
-  
-  Add listeners to managers to rely messages to views
-  
-  Store events to Firestore
+TODO:
   
   Adding parsing method to ImportUtil class
   
