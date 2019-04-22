@@ -2,6 +2,7 @@ package com.example.singlemind.UI;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,8 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.singlemind.Adapter.CalendarAdapter;
+import com.example.singlemind.Controllers.DBManager;
 import com.example.singlemind.Model.Event;
 import com.example.singlemind.R;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +27,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class EventsFragment extends Fragment implements View.OnClickListener {
 
-    private List<Event> recyclerEvents = new ArrayList<>();
-    private RecyclerView calendarRecycler;
-    private CalendarAdapter calendarAdapter;
+    private List<Event> mRecyclerEvents = new ArrayList<>();
+    private RecyclerView mCalendarRecycler;
+    private CalendarAdapter mCalendarAdapter;
+
+    private static final String TAG = "EventsFragment";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,27 +45,34 @@ public class EventsFragment extends Fragment implements View.OnClickListener {
         View v = inflater.inflate(R.layout.fragment_events, container, false);
 
         init(v);
-        initEvents();
-
-        calendarAdapter = new CalendarAdapter(recyclerEvents);
-        calendarRecycler.setAdapter(calendarAdapter);
+        initEvents(v);
 
         return v;
     }
 
     public void init(View view) {
 
-        calendarRecycler = view.findViewById(R.id.recycler_calendar);
+        mCalendarRecycler = view.findViewById(R.id.recycler_calendar);
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
-        calendarRecycler.setLayoutManager(llm);
+        mCalendarRecycler.setLayoutManager(llm);
 
     }
 
-    private void initEvents() {
-//        recyclerEvents.add(new Event("Homework", 8, "Homework2a", "long string"));
-//        recyclerEvents.add(new Event("Homework", 8, "Homework2b", "long string"));
-//        recyclerEvents.add(new Event("Homework", 8, "Homework2c", "long string"));
-//        recyclerEvents.add(new Event("Homework", 8, "Homework2d", "long string"));
+    private void initEvents(View view) {
+        DBManager.getInstance().getEvents(new IFiretoreObjectListener() {
+            @Override
+            public void onRetrievalSuccess(Object object) {
+                mRecyclerEvents = (List<Event>) object;
+                mCalendarAdapter = new CalendarAdapter(mRecyclerEvents);
+                mCalendarRecycler.setAdapter(mCalendarAdapter);
+            }
+
+            @Override
+            public void onRetrievalFailure() {
+                Snackbar.make(view, R.string.event_error_on_storage, Snackbar.LENGTH_SHORT).show();
+
+            }
+        });
     }
 
     @Override

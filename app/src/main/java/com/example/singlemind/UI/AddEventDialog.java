@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 
 import com.example.singlemind.Controllers.DBManager;
-import com.example.singlemind.FlagEvent;
+import com.example.singlemind.Controllers.FlagEvent;
 import com.example.singlemind.Model.Event;
 import com.example.singlemind.R;
 import com.example.singlemind.Utility.DateFormatterUtil;

@@ -14,10 +14,10 @@ import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
 import com.example.singlemind.Controllers.DBManager;
-import com.example.singlemind.Controllers.ICSManager;
-import com.example.singlemind.FlagEvent;
+import com.example.singlemind.Controllers.FlagEvent;
 import com.example.singlemind.Model.Event;
 import com.example.singlemind.R;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -56,8 +56,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onDayClick(EventDay eventDay) {
                 Calendar clickedDayCalendar = eventDay.getCalendar();
+
                 EventsFragment fragment = new EventsFragment();
-                ((MainActivity)getActivity()).doNormalFragmentTransaction(fragment, getString(R.string.fragmentEvents), false);
+                ((MainActivity)getActivity()).doNormalFragmentTransaction(fragment, getString(R.string.fragmentEvents), true);
             }
         });
         return v;
@@ -70,7 +71,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         mEvents.add(new EventDay(calendar, R.drawable.ic_dot));
 
         mCalendarView = view.findViewById(R.id.calendarView);
-        mCalendarView.setEvents(mEvents);
+
+        DBManager.getInstance().getEventDays(new IFiretoreObjectListener() {
+            @Override
+            public void onRetrievalSuccess(Object object) {
+                mEvents = (List<EventDay>) object;
+                //updateUI
+                mCalendarView.setEvents(mEvents);
+            }
+
+            @Override
+            public void onRetrievalFailure() {
+                Snackbar.make(view, R.string.event_error_on_storage, Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
 
@@ -120,7 +135,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         //retrieve info from dialog
         Log.i(TAG, "Subscriber heard you loud and clear");
         if (event.getFlag()) {
-            DBManager.getInstance().getEvents(new IFiretoreObjectListener() {
+            DBManager.getInstance().getEventDays(new IFiretoreObjectListener() {
                 @Override
                 public void onRetrievalSuccess(Object object) {
                     mEvents = (List<EventDay>) object;
@@ -135,6 +150,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             });
 
         }
+    }
+
+    public void updateUI(){
+        //
     }
 
     @Override

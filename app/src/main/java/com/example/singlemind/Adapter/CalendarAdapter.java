@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.EventViewHolder>{
 
-    private List<Event> recyclerEvents;
+    private List<Event> mRecyclerEvents;
 
     public static class EventViewHolder extends RecyclerView.ViewHolder {
         CardView mEventCard;
@@ -33,7 +33,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.EventV
     }
 
     public CalendarAdapter(List<Event> events) {
-        recyclerEvents = events;
+        mRecyclerEvents = events;
     }
 
     @NonNull
@@ -46,10 +46,10 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.EventV
 
     @Override
     public void onBindViewHolder(@NonNull CalendarAdapter.EventViewHolder holder, int position) {
-//        holder.mEventName.setText(recyclerEvents.get(position).getmEventName());
-//        holder.mEventType.setText(recyclerEvents.get(position).getmEventType());
-       // holder.mEventTime.setText(recyclerEvents.get(position).getmEventTime());
-        //holder.mEventContent.setText(recyclerEvents.get(position).getmEventContent());
+        holder.mEventName.setText(mRecyclerEvents.get(position).getmEventName());
+        //holder.mEventType.setText(mRecyclerEvents.get(position).getmEventType());
+        holder.mEventTime.setText(mRecyclerEvents.get(position).getmEventTime());
+        holder.mEventContent.setText(mRecyclerEvents.get(position).getmEventDescription());
     }
 
     @Override
@@ -59,6 +59,6 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.EventV
 
     @Override
     public int getItemCount() {
-        return recyclerEvents.size();
+        return mRecyclerEvents.size();
     }
 }

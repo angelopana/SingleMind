@@ -31,8 +31,6 @@ import androidx.annotation.NonNull;
 
 public class DBManager {
 
-    private List<EventDay> mEvents = new ArrayList<>();
-
     private static final String TAG = "DBManager";
     private static final String DESCIRPTION_KEY = "mEventDescription";
     private static final String TITLE_KEY = "mEventName";
@@ -66,23 +64,26 @@ public class DBManager {
                     @Override
                     public void onSuccess(Void aVoid) {
                         iUpdatable.onUpdateSuccess();
-                        Log.d(TAG, "Date written successfully");
+                        Log.d(TAG, "Event written successfully");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         iUpdatable.onUpdateFailed();
-                        Log.w(TAG, "Error adding date", e);
+                        Log.w(TAG, "Error adding event", e);
                     }
                 });
     }
 
 
-    public void getEvents(final IFiretoreObjectListener iFiretoreObjectListener) {
+    public void getEventDays(final IFiretoreObjectListener iFiretoreObjectListener) {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        List<EventDay> mEvents = new ArrayList<>();
+
         db.collection(user.getEmail())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -90,14 +91,8 @@ public class DBManager {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                String description = document.getString(DESCIRPTION_KEY);
-                                String title = document.getString(TITLE_KEY);
                                 String time = document.getString(DATE_KEY);
-                                int type = document.getLong(TYPE_KEY).intValue();
-                                long UID = (Long) document.get(UID_KEY);
 
-                                Log.i(TAG, time);
                                 Calendar cal = Calendar.getInstance();
                                 cal = new DateFormatterUtil().getCalDateFromString(time);
 
@@ -114,4 +109,38 @@ public class DBManager {
                     }
                 });
     }
+
+    public void getEvents(final IFiretoreObjectListener iFiretoreObjectListener) {
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        List<Event> mRecyclerEvents = new ArrayList<>();
+
+        db.collection(user.getEmail())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String description = document.getString(DESCIRPTION_KEY);
+                                String title = document.getString(TITLE_KEY);
+                                String time = document.getString(DATE_KEY);
+                                int type = document.getLong(TYPE_KEY).intValue();
+                                long UID = (Long) document.get(UID_KEY);
+
+                                mRecyclerEvents.add(new Event(title, type, time, description, UID));
+                            }
+
+                            iFiretoreObjectListener.onRetrievalSuccess(mRecyclerEvents);
+                        } else {
+
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                            iFiretoreObjectListener.onRetrievalFailure();
+                        }
+                    }
+                });
+    }
+
 }
