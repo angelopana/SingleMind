@@ -1,12 +1,12 @@
 <component name="libraryTable">
   <library name="Gradle: com.mikepenz:fastadapter:3.3.0@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/jetified-fastadapter-3.3.0.aar/5a49bc60ffdf1a077fd4bc92b4ae771a/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/jetified-fastadapter-3.3.0.aar/5a49bc60ffdf1a077fd4bc92b4ae771a/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/jetified-fastadapter-3.3.0.aar/c5a503020cb54d28443663dffeb776af/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/jetified-fastadapter-3.3.0.aar/c5a503020cb54d28443663dffeb776af/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.mikepenz/fastadapter/3.3.0/a1bf970fbfb3aec7d2db89e9e02761e10273cfb4/fastadapter-3.3.0-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.mikepenz/fastadapter/3.3.0/c4c6f80e44a7d227fe086f64cfffc30ed7f0d029/fastadapter-3.3.0-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
