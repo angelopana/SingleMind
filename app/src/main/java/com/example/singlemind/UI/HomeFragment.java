@@ -76,9 +76,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     public void initCalendar(View view) {
 
-        Calendar calendar = Calendar.getInstance();
-        mEvents.add(new EventDay(calendar, R.drawable.ic_dot));
-
         mCalendarView = view.findViewById(R.id.calendarView);
 
         DBManager.getInstance().getEventDays(new IFiretoreObjectListener() {

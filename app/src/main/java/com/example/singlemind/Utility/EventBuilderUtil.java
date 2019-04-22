@@ -10,6 +10,7 @@ import java.util.List;
 public class EventBuilderUtil {
 
     private List<Event> mEvents = new ArrayList<>();
+
     private static final String TAG = "EventBuilderUtil";
 
     public EventBuilderUtil() {}
