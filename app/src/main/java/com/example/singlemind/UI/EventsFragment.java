@@ -14,9 +14,12 @@ import com.example.singlemind.Adapter.CalendarAdapter;
 import com.example.singlemind.Controllers.DBManager;
 import com.example.singlemind.Model.Event;
 import com.example.singlemind.R;
+import com.example.singlemind.Utility.DateFormatterUtil;
+import com.example.singlemind.Utility.EventBuilderUtil;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -30,6 +33,7 @@ public class EventsFragment extends Fragment implements View.OnClickListener {
     private List<Event> mRecyclerEvents = new ArrayList<>();
     private RecyclerView mCalendarRecycler;
     private CalendarAdapter mCalendarAdapter;
+    private Calendar mCalendar;
 
     private static final String TAG = "EventsFragment";
 
@@ -43,6 +47,13 @@ public class EventsFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_events, container, false);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            String calStr = bundle.getString("calendar");
+            Log.i(TAG, calStr);
+            mCalendar = new DateFormatterUtil().getCalDateFromString(calStr);
+        }
 
         init(v);
         initEvents(v);
@@ -62,7 +73,8 @@ public class EventsFragment extends Fragment implements View.OnClickListener {
         DBManager.getInstance().getEvents(new IFiretoreObjectListener() {
             @Override
             public void onRetrievalSuccess(Object object) {
-                mRecyclerEvents = (List<Event>) object;
+
+                mRecyclerEvents = new EventBuilderUtil().getEventsByDay((List<Event>) object, mCalendar);
                 mCalendarAdapter = new CalendarAdapter(mRecyclerEvents);
                 mCalendarRecycler.setAdapter(mCalendarAdapter);
             }

@@ -36,8 +36,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private List<EventDay> mEvents = new ArrayList<>();
     private ArrayList<Event> e = new ArrayList<>();
     private CalendarView mCalendarView;
+    private IMainActivity iMainActivity;
 
     private static final String TAG = "HomeFragment";
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        EventBus.getDefault().register(this);
+        iMainActivity = (IMainActivity) getActivity();
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,10 +64,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         mCalendarView.setOnDayClickListener(new OnDayClickListener() {
             @Override
             public void onDayClick(EventDay eventDay) {
-                Calendar clickedDayCalendar = eventDay.getCalendar();
+                Calendar cal = eventDay.getCalendar();
 
                 EventsFragment fragment = new EventsFragment();
-                ((MainActivity)getActivity()).doNormalFragmentTransaction(fragment, getString(R.string.fragmentEvents), true);
+                ((MainActivity)getActivity()).doDateFragmentTransaction(fragment, getString(R.string.fragmentEvents), true, cal);
             }
         });
         return v;
@@ -88,12 +97,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     }
 
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        EventBus.getDefault().register(this);
-    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -127,7 +130,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume(){
         super.onResume();
-
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

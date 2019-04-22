@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.singlemind.R;
+import com.example.singlemind.Utility.DateFormatterUtil;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,11 +31,13 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
+import java.util.Calendar;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements IMainActivity{
 
     //widgets
     private Toolbar toolbar;
@@ -47,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseUser mUser;
     private String mName, mEmail;
     private Uri mPhotoUrl;
+    private Calendar mCalendar;
 
     //const
     private static final String TAG = "MainActivity";
@@ -229,6 +233,26 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
 
+    public void doDateFragmentTransaction(Fragment fragment, String tag, boolean addToBackStack, Calendar cal){
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        Bundle bundle = new Bundle();
+
+        if(cal != null){
+            String calendar = new DateFormatterUtil().getFullDate(cal);
+            bundle.putString("calendar", calendar);
+        }
+
+        fragment.setArguments(bundle);
+
+        transaction.replace(R.id.fragment_container, fragment, tag);
+
+        if(addToBackStack){
+            transaction.addToBackStack(tag);
+        }
+        transaction.commit();
+    }
+
 
     @Override
     public void onStart() {
@@ -238,5 +262,9 @@ public class MainActivity extends AppCompatActivity {
         //updateUI(currentUser);
     }
 
+    @Override
+    public void setCalendarDate(Calendar calendar) {
+            mCalendar = calendar;
+    }
 }
 
