@@ -1,6 +1,7 @@
 package com.example.singlemind.UI;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.example.singlemind.R;
 import com.example.singlemind.Utility.DateFormatterUtil;
@@ -30,6 +32,9 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
+import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
+import com.mikepenz.materialdrawer.util.DrawerImageLoader;
+import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 
@@ -50,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements IMainActivity{
     private FirebaseUser mUser;
     private String mName, mEmail;
     private Uri mPhotoUrl;
+    private ProfileDrawerItem mProfileHeader;
     private Calendar mCalendar;
 
     //const
@@ -86,11 +92,18 @@ public class MainActivity extends AppCompatActivity implements IMainActivity{
         mAuth = FirebaseAuth.getInstance();
 
         mUser = FirebaseAuth.getInstance().getCurrentUser();
+
         if (mUser != null) {
             mName = mUser.getDisplayName();
             mEmail = mUser.getEmail();
+            if (mUser.getPhotoUrl() != null) {
+                mPhotoUrl = mUser.getPhotoUrl();
+                Log.i(TAG, mPhotoUrl.toString());
+            }
         }
 
+        addProfileHeaders();
+        overrideDrawerImageLoaderPicasso();
         setSupportActionBar(bottomAppBar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
@@ -100,6 +113,29 @@ public class MainActivity extends AppCompatActivity implements IMainActivity{
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.bottom_bar, menu);
         return true;
+    }
+
+    private void addProfileHeaders() {
+        if (mPhotoUrl != null) {
+            mProfileHeader = new ProfileDrawerItem().withName(mName).withEmail(mEmail).withIcon(mPhotoUrl.toString());
+        }
+        else {
+            mProfileHeader = new ProfileDrawerItem().withName(mName).withEmail(mEmail).withIcon(R.drawable.ic_user);
+        }
+    }
+    private void overrideDrawerImageLoaderPicasso(){
+        DrawerImageLoader.init(new AbstractDrawerImageLoader() {
+            @Override
+            public void set(ImageView imageView, Uri uri, Drawable placeholder) {
+                Picasso.get().load(uri).placeholder(placeholder).into(imageView);
+            }
+
+            @Override
+            public void cancel(ImageView imageView) {
+                Picasso.get().cancelRequest(imageView);
+            }
+
+        });
     }
 
 
@@ -121,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements IMainActivity{
                 .withActivity(this)
 //                 .withHeaderBackground(R.drawable.wood_header)
                 .addProfiles(
-                        new ProfileDrawerItem().withName(mEmail).withEmail(mEmail).withIcon(getResources().getDrawable(R.drawable.duck))
+                        mProfileHeader
                 )
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
@@ -244,7 +280,6 @@ public class MainActivity extends AppCompatActivity implements IMainActivity{
         }
 
         fragment.setArguments(bundle);
-
         transaction.replace(R.id.fragment_container, fragment, tag);
 
         if(addToBackStack){

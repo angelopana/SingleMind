@@ -92,12 +92,35 @@ public class DBManager {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 String time = document.getString(DATE_KEY);
+                                int type = document.getLong(TYPE_KEY).intValue();
 
-                                Calendar cal = Calendar.getInstance();
+                                Calendar cal;
                                 cal = new DateFormatterUtil().getCalDateFromString(time);
 
-                                //add dot dependent on type
-                                mEvents.add(new EventDay(cal, R.drawable.ic_dot));
+                                switch (type) {
+                                    case 0:
+                                        mEvents.add(new EventDay(cal, R.drawable.ic_dot_blue_4dp));
+                                        break;
+                                    case 1:
+                                        mEvents.add(new EventDay(cal, R.drawable.ic_dot_green_4dp));
+                                        break;
+                                    case 2:
+                                        mEvents.add(new EventDay(cal, R.drawable.ic_dot_red_4dp));
+                                        break;
+                                    case 3:
+                                        mEvents.add(new EventDay(cal, R.drawable.ic_dot_yellow_4dp));
+                                        break;
+                                    case 4:
+                                        mEvents.add(new EventDay(cal, R.drawable.ic_dot_pink_4dp));
+                                        break;
+                                    case 6:
+                                        mEvents.add(new EventDay(cal, R.drawable.ic_dot_grey_4dp));
+                                        break;
+                                    default:
+                                        mEvents.add(new EventDay(cal, R.drawable.ic_dot_grey_4dp));
+                                        break;
+                                }
+
                             }
 
                             iFiretoreObjectListener.onRetrievalSuccess(mEvents);

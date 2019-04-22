@@ -17,19 +17,16 @@ public class DateFormatterUtil {
 
         Date timeDate = cal.getTime();
         String outputStr = null;
-
         DateFormat output = new SimpleDateFormat("h:mmaa");
         outputStr = output.format(timeDate);
 
         return outputStr;
-
     }
 
     public String getDayDate(Calendar cal) {
 
         Date timeDate = cal.getTime();
         String outputStr = null;
-
         DateFormat output = new SimpleDateFormat("EEEE MM/dd/yy");
         outputStr = output.format(timeDate);
 
@@ -39,7 +36,6 @@ public class DateFormatterUtil {
     public String getFullDate(Calendar cal) {
         Date timeDate = cal.getTime();
         String outputStr = null;
-
         DateFormat output = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         outputStr = output.format(timeDate);
 
@@ -67,5 +63,4 @@ public class DateFormatterUtil {
 
         return cal;
     }
-
 }

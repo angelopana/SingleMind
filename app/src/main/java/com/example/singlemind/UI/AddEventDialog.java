@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TimePicker;
@@ -26,6 +28,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.Calendar;
 import java.util.Date;
 
+import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
@@ -33,11 +36,12 @@ import androidx.fragment.app.FragmentManager;
 
 import static android.app.Activity.RESULT_OK;
 
-public class AddEventDialog extends DialogFragment {
+public class AddEventDialog extends DialogFragment implements AdapterView.OnItemSelectedListener {
 
     private EditText mETTitle, mETDescription;
     private Button mBtnDatePicker, mBtnTimePicker, mSubmit;
     private TimePickerDialog mStartTimePicker;
+    private AppCompatSpinner mSpinner;
 
     private ConstraintLayout mRootView;
     private static Calendar sCal;
@@ -74,6 +78,7 @@ public class AddEventDialog extends DialogFragment {
         mETTitle = view.findViewById(R.id.edit_name);
         mETDescription = view.findViewById(R.id.edit_event_description);
         mRootView = view.findViewById(android.R.id.content);
+        mSpinner = view.findViewById(R.id.spinner_event_type);
 
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
@@ -155,6 +160,11 @@ public class AddEventDialog extends DialogFragment {
             }
         });
 
+        mSpinner.setOnItemSelectedListener(this);
+        ArrayAdapter<String> aa = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item,
+                getResources().getStringArray(R.array.add_event_spinner_entries));
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinner.setAdapter(aa);
 
         return view;
     }
@@ -185,5 +195,15 @@ public class AddEventDialog extends DialogFragment {
             int height = ViewGroup.LayoutParams.MATCH_PARENT;
             dialog.getWindow().setLayout(width, height);
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        sEvent.setmEventType(position);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

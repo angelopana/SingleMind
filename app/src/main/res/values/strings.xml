@@ -53,6 +53,16 @@
     <string name="add_event_time">Event time</string>
     <string name="add_event_description">Enter description</string>
     <string name="add_event_submit">Submit</string>
+    <string name="add_event_type">Event type</string>
+    <string name="add_event_type_prompt">Select</string>
+    <string-array name="add_event_spinner_entries">
+        <item>Homework</item>
+        <item>Appointment</item>
+        <item>Gathering</item>
+        <item>Party</item>
+        <item>Birthday</item>
+        <item>Other</item>
+    </string-array>
 
     <!--DatePickerFragment-->
     <string name="event_date_picker_title">Set event day</string>
