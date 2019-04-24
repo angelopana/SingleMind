@@ -13,10 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.singlemind.Model.Event;
 import com.example.singlemind.Utility.ImportUtil;
 import com.example.singlemind.R;
 
 import java.io.IOException;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -130,8 +132,8 @@ public class ImportFragment extends Fragment implements View.OnClickListener {
             if (resultData != null) {
                 uri = resultData.getData();
                 try {
-                    String test = new ImportUtil().readTextFromUri(getContext(), uri);
-                    Log.i(TAG, test);
+                    List<Event> test = new ImportUtil().readTextFromUri(getContext(), uri);
+                    //Log.i(TAG, test);
                 }
                 catch (IOException e) {
                     e.getStackTrace();

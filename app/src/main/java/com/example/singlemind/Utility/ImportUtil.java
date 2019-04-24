@@ -33,6 +33,7 @@ public class ImportUtil {
     //StringBuilder dStart = new StringBuilder();
 
     List<Event> calCC = new ArrayList<>();
+
     //List<String> dStart = new ArrayList<>();
     //List<String> dEnd = new ArrayList<>();
     //List<String> summary = new ArrayList<>();
@@ -40,16 +41,21 @@ public class ImportUtil {
     String cName = "";
     String dEnd = "";
     String summary = "";
-    public String readTextFromUri(Context context, Uri uri) throws IOException {
+    public List<Event> readTextFromUri(Context context, Uri uri) throws IOException {
         InputStream inputStream = context.getContentResolver().openInputStream(uri);
         BufferedReader reader = new BufferedReader(new InputStreamReader(
                 inputStream));
         StringBuilder stringBuilder = new StringBuilder();
         String line;
 
+        int count = 0;
         while ((line = reader.readLine()) != null) {
             //Log.i("======================INSIDE WHILE======================", line);
-            if(line.contains("CATEGORIES")){
+            if(line.contains("END:VEVENT")){
+                calCC.add(new Event(cName, 0, dEnd, summary, System.currentTimeMillis()));
+                cName = dEnd = summary = "";
+            }
+            else if(line.contains("CATEGORIES")){
                 cName= parseCatagories(line);
             }
             else if(line.contains("DTEND")){
@@ -59,19 +65,15 @@ public class ImportUtil {
                 summary= parseSummary(line);
             }
 
-            //Testing----------
-            calCC.add(new Event(cName, 0, dEnd, summary, System.currentTimeMillis()));
-
-            //sEvent.setmEventUID(System.currentTimeMillis());
         }//end of while-loop
 
 
-        Log.i("---------", calCC.get(0).getmEventName());
-        //Log.i("======================END DATE======================", dEnd.toString());
-
+        //Log.i("---------", String.valueOf(count));
+        //Log.i("======================END DATE======================", calCC.getSize();
+        
         inputStream.close();
 
-        return stringBuilder.toString();
+        return calCC;
     }
 
     private String fixDate(String d){
@@ -119,7 +121,6 @@ public class ImportUtil {
     }//return only fixed start date numbers
 
 
-    @org.jetbrains.annotations.NotNull
     private String parseSummary(String s) {
         //regex code to ignore Summary and just grab discription
         Pattern p = Pattern.compile("\\b(?!(?:SUMMARY:\\b))[\\w ]+");
