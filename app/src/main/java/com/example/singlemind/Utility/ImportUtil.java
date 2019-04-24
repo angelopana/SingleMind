@@ -5,10 +5,9 @@ import android.net.Uri;
 import android.util.Log;
 import android.util.Patterns;
 
+import com.example.singlemind.Controllers.DBManager;
 import com.example.singlemind.Model.Event;
-import com.google.protobuf.StringValue;
-
-import org.jetbrains.annotations.NotNull;
+import com.example.singlemind.UI.IUpdatable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -33,7 +32,6 @@ public class ImportUtil {
     //StringBuilder dStart = new StringBuilder();
 
     List<Event> calCC = new ArrayList<>();
-
     //List<String> dStart = new ArrayList<>();
     //List<String> dEnd = new ArrayList<>();
     //List<String> summary = new ArrayList<>();
@@ -41,21 +39,16 @@ public class ImportUtil {
     String cName = "";
     String dEnd = "";
     String summary = "";
-    public List<Event> readTextFromUri(Context context, Uri uri) throws IOException {
+    public String readTextFromUri(Context context, Uri uri) throws IOException {
         InputStream inputStream = context.getContentResolver().openInputStream(uri);
         BufferedReader reader = new BufferedReader(new InputStreamReader(
                 inputStream));
         StringBuilder stringBuilder = new StringBuilder();
         String line;
 
-        int count = 0;
         while ((line = reader.readLine()) != null) {
             //Log.i("======================INSIDE WHILE======================", line);
-            if(line.contains("END:VEVENT")){
-                calCC.add(new Event(cName, 0, dEnd, summary, System.currentTimeMillis()));
-                cName = dEnd = summary = "";
-            }
-            else if(line.contains("CATEGORIES")){
+            if(line.contains("CATEGORIES")){
                 cName= parseCatagories(line);
             }
             else if(line.contains("DTEND")){
@@ -65,15 +58,33 @@ public class ImportUtil {
                 summary= parseSummary(line);
             }
 
+            //Testing----------
+            //calCC.add();
+
+            Event e = new Event(cName, 0, dEnd, summary, System.currentTimeMillis());
+
+            DBManager.getInstance().setEvent(e, new IUpdatable() {
+                @Override
+                public void onUpdateSuccess() {
+                    Log.i("Success:", "IT WORKED!");
+                }
+
+                @Override
+                public void onUpdateFailed() {
+                    //
+                }
+            });
+
+            //sEvent.setmEventUID(System.currentTimeMillis());
         }//end of while-loop
 
 
-        //Log.i("---------", String.valueOf(count));
-        //Log.i("======================END DATE======================", calCC.getSize();
-        
+//        Log.i("---------", calCC.get(0).getmEventName());
+        //Log.i("======================END DATE======================", dEnd.toString());
+
         inputStream.close();
 
-        return calCC;
+        return stringBuilder.toString();
     }
 
     private String fixDate(String d){
@@ -135,7 +146,6 @@ public class ImportUtil {
     }//end of summary parse method
 
 
-    @NotNull
     private String parseCatagories(String s) {
         //regex code to ignore Summary and just grab discription
         Pattern p = Pattern.compile("\\b(?!(?:CATEGORIES:\\b))[\\w-]+");
