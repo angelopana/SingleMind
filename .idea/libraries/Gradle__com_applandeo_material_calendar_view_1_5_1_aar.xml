@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: com.applandeo:material-calendar-view:1.5.1@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/jetified-material-calendar-view-1.5.1.aar/6451e29aa5565464b07fcc5a18e504b0/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/jetified-material-calendar-view-1.5.1.aar/6451e29aa5565464b07fcc5a18e504b0/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/jetified-material-calendar-view-1.5.1.aar/05eaf247a1692b103ef38a1a03d8c580/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/jetified-material-calendar-view-1.5.1.aar/05eaf247a1692b103ef38a1a03d8c580/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

@@ -5,10 +5,9 @@ import android.net.Uri;
 import android.util.Log;
 import android.util.Patterns;
 
+import com.example.singlemind.Controllers.DBManager;
 import com.example.singlemind.Model.Event;
-import com.google.protobuf.StringValue;
-
-import org.jetbrains.annotations.NotNull;
+import com.example.singlemind.UI.IUpdatable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -60,13 +59,27 @@ public class ImportUtil {
             }
 
             //Testing----------
-            calCC.add(new Event(cName, 0, dEnd, summary, System.currentTimeMillis()));
+            //calCC.add();
+
+            Event e = new Event(cName, 0, dEnd, summary, System.currentTimeMillis());
+
+            DBManager.getInstance().setEvent(e, new IUpdatable() {
+                @Override
+                public void onUpdateSuccess() {
+                    Log.i("Success:", "IT WORKED!");
+                }
+
+                @Override
+                public void onUpdateFailed() {
+                    //
+                }
+            });
 
             //sEvent.setmEventUID(System.currentTimeMillis());
         }//end of while-loop
 
 
-        Log.i("---------", calCC.get(0).getmEventName());
+//        Log.i("---------", calCC.get(0).getmEventName());
         //Log.i("======================END DATE======================", dEnd.toString());
 
         inputStream.close();
@@ -119,7 +132,6 @@ public class ImportUtil {
     }//return only fixed start date numbers
 
 
-    @org.jetbrains.annotations.NotNull
     private String parseSummary(String s) {
         //regex code to ignore Summary and just grab discription
         Pattern p = Pattern.compile("\\b(?!(?:SUMMARY:\\b))[\\w ]+");
@@ -134,7 +146,6 @@ public class ImportUtil {
     }//end of summary parse method
 
 
-    @NotNull
     private String parseCatagories(String s) {
         //regex code to ignore Summary and just grab discription
         Pattern p = Pattern.compile("\\b(?!(?:CATEGORIES:\\b))[\\w-]+");
