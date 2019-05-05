@@ -2,12 +2,8 @@ package com.example.singlemind.Utility;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
-import android.util.Patterns;
 
-import com.example.singlemind.Controllers.DBManager;
 import com.example.singlemind.Model.Event;
-import com.example.singlemind.UI.IUpdatable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,7 +13,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,62 +24,43 @@ public class ImportUtil {
     private final static String TAG = "com.example.singlemind.Utility.ImportUtil";
 
     public String[] stringList;
-    //StringBuilder dStart = new StringBuilder();
 
     List<Event> calCC = new ArrayList<>();
-    //List<String> dStart = new ArrayList<>();
-    //List<String> dEnd = new ArrayList<>();
-    //List<String> summary = new ArrayList<>();
 
-    String cName = "";
-    String dEnd = "";
-    String summary = "";
-    public String readTextFromUri(Context context, Uri uri) throws IOException {
+    private String cName, dEnd, summary;
+    Event event = new Event();
+
+    //This code can be further optimized to support large ICS files.
+    public List<Event> readTextFromUri(Context context, Uri uri) throws IOException {
+
         InputStream inputStream = context.getContentResolver().openInputStream(uri);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(
-                inputStream));
-        StringBuilder stringBuilder = new StringBuilder();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         String line;
 
         while ((line = reader.readLine()) != null) {
-            //Log.i("======================INSIDE WHILE======================", line);
+
             if(line.contains("CATEGORIES")){
                 cName= parseCatagories(line);
+                event.setmEventName(cName);
+                event.setmEventType(0);
+                event.setmEventUID(System.currentTimeMillis());
+                calCC.add(event);
+                event = new Event();
             }
             else if(line.contains("DTEND")){
                 dEnd = fixDate(line);
+                event.setmEventTime(dEnd);
             }
             else if(line.contains("SUMMARY")){
                 summary= parseSummary(line);
+                event.setmEventDescription(summary);
             }
 
-            //Testing----------
-            //calCC.add();
-
-            Event e = new Event(cName, 0, dEnd, summary, System.currentTimeMillis());
-
-            DBManager.getInstance().setEvent(e, new IUpdatable() {
-                @Override
-                public void onUpdateSuccess() {
-                    Log.i("Success:", "IT WORKED!");
-                }
-
-                @Override
-                public void onUpdateFailed() {
-                    //
-                }
-            });
-
-            //sEvent.setmEventUID(System.currentTimeMillis());
         }//end of while-loop
-
-
-//        Log.i("---------", calCC.get(0).getmEventName());
-        //Log.i("======================END DATE======================", dEnd.toString());
 
         inputStream.close();
 
-        return stringBuilder.toString();
+        return calCC;
     }
 
     private String fixDate(String d){
@@ -142,7 +118,7 @@ public class ImportUtil {
         while(m.find()){
             i.append(m.group());
         }//end of whileloop
-       return i.toString();
+        return i.toString();
     }//end of summary parse method
 
 

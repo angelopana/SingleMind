@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -38,8 +39,6 @@ public class DBManager {
     private static final String TYPE_KEY = "mEventType";
     private static final String UID_KEY = "mEventUID";
 
-
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static DBManager sSoleInstance;
 
     private DBManager(){}  //private constructor.
@@ -166,4 +165,27 @@ public class DBManager {
                 });
     }
 
+    public void deleteEvent(Event event, final IUpdatable iUpdatable) {
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String identifier = Long.valueOf(event.getmEventUID()).toString();
+
+        db.collection(user.getEmail()).document(identifier)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        iUpdatable.onUpdateSuccess();
+                        Log.d(TAG, "Event successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        iUpdatable.onUpdateFailed();
+                        Log.w(TAG, "Error deleting document", e);
+                    }
+                });
+    }
 }

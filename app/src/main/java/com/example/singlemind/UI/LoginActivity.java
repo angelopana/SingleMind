@@ -72,14 +72,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mFacebookBtn = findViewById(R.id.button_facebook);
         mGoogleBtn = findViewById(R.id.button_google);
         mEmailBtn = findViewById(R.id.button_email);
-        mAnonBtn = findViewById(R.id.button_anon);
+//        mAnonBtn = findViewById(R.id.button_anon);
         mRegisterBtn = findViewById(R.id.button_registration);
 
         //set button listeners
         mFacebookBtn.setOnClickListener(this);
         mGoogleBtn.setOnClickListener(this);
         mEmailBtn.setOnClickListener(this);
-        mAnonBtn.setOnClickListener(this);
+//        mAnonBtn.setOnClickListener(this);
         mRegisterBtn.setOnClickListener(this);
 
         //init Firebase Auth
@@ -187,31 +187,31 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 });
     }
 
-    private void anonLogin() {
-        mAuth.signInAnonymously()
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInAnonymously:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            //updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInAnonymously:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
-                        }
-
-                        // ...
-                    }
-                });
-    }
+//    private void anonLogin() {
+////        mAuth.signInAnonymously()
+////                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+////                    @Override
+////                    public void onComplete(@NonNull Task<AuthResult> task) {
+////                        if (task.isSuccessful()) {
+////                            // Sign in success, update UI with the signed-in user's information
+////                            Log.d(TAG, "signInAnonymously:success");
+////                            FirebaseUser user = mAuth.getCurrentUser();
+////
+////                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+////                            startActivity(intent);
+////                            //updateUI(user);
+////                        } else {
+////                            // If sign in fails, display a message to the user.
+////                            Log.w(TAG, "signInAnonymously:failure", task.getException());
+////                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+////                                    Toast.LENGTH_SHORT).show();
+////                            //updateUI(null);
+////                        }
+////
+////                        // ...
+////                    }
+////                });
+////    }
 
     @Override
     public void onClick(View v) {
@@ -235,11 +235,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
             }
 
-            case R.id.button_anon: {
-                //implement firebase auth
-                anonLogin();
-                break;
-            }
+//            case R.id.button_anon: {
+//                //implement firebase auth
+//                anonLogin();
+//                break;
+//            }
 
             case R.id.button_registration: {
                 Intent intent = new Intent(this, RegistrationActivity.class);

@@ -1,12 +1,17 @@
 package com.example.singlemind.Adapter;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.singlemind.Controllers.DBManager;
 import com.example.singlemind.Model.Event;
 import com.example.singlemind.R;
+import com.example.singlemind.UI.IUpdatable;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -50,6 +55,49 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.EventV
         //holder.mEventType.setText(mRecyclerEvents.get(position).getmEventType());
         holder.mEventTime.setText(mRecyclerEvents.get(position).getmEventTime());
         holder.mEventContent.setText(mRecyclerEvents.get(position).getmEventDescription());
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setTitle("Delete Event");
+                builder.setMessage("You will not be able to recover this event");
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                        dialog.dismiss();
+                    }
+                });
+                builder.setPositiveButton("Ok",  new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //delete event
+                        Event e = mRecyclerEvents.get(position);
+                        DBManager.getInstance().deleteEvent(e, new IUpdatable() {
+                            @Override
+                            public void onUpdateSuccess() {
+                                //successfully deleted - remove from view
+                                mRecyclerEvents.remove(position);
+                                notifyItemRemoved(position);
+                                Snackbar.make(view, "Item Removed", Snackbar.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onUpdateFailed() {
+                                //successfully destroyed
+                                Snackbar.make(view, "Deletion Failed- Check Network Connection", Snackbar.LENGTH_SHORT).show();
+                            }
+                        });
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                return false;
+            }
+        });
     }
 
     @Override

@@ -83,17 +83,17 @@
                 android:text="@string/login_activity_email"
                 android:textColor="#FFFFFF" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/button_anon"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/anon_button"
-                android:drawableLeft="@drawable/ic_anon_white"
-                android:paddingTop="5dp"
-                android:paddingLeft="16dp"
-                android:text="@string/login_activity_anon"
-                android:textColor="#FFFFFF" />
+            <!--<androidx.appcompat.widget.AppCompatButton-->
+                <!--android:id="@+id/button_anon"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="16dp"-->
+                <!--android:background="@drawable/anon_button"-->
+                <!--android:drawableLeft="@drawable/ic_anon_white"-->
+                <!--android:paddingTop="5dp"-->
+                <!--android:paddingLeft="16dp"-->
+                <!--android:text="@string/login_activity_anon"-->
+                <!--android:textColor="#FFFFFF" />-->
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_registration"
