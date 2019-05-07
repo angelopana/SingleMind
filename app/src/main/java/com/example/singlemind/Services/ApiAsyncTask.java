@@ -104,6 +104,9 @@ public class ApiAsyncTask extends AsyncTask<Void, Void, Void> {
 
                 //fix date
             }
+
+            String fixedTime = fixDate(start.toString());
+
             eventStrings.add(
                     String.format("%s (%s)", event.getSummary(), start));
 
@@ -122,5 +125,49 @@ public class ApiAsyncTask extends AsyncTask<Void, Void, Void> {
 
         return eventStrings;
     }
+
+    private String fixDate(String d){
+
+        String fdate = "";
+        String newDate = null;
+        Date date = null;
+
+        //parsing the ics to reformt the date
+        fdate = parseDates(d);
+
+        //old format of parsed dates
+        String inputPattern = "yyyyMMddhhmmss";
+
+        //the new output format
+        String outputPattern = "MM/dd/yyyy hh:mm:ss";
+        SimpleDateFormat inputFormat = new SimpleDateFormat(inputPattern);
+        SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern);
+
+        //reformating the dates
+        try {
+
+            date = inputFormat.parse(fdate);
+            newDate = outputFormat.format(date);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return newDate;
+    }//end of fixDate
+
+    //Parse ICS date to only use date & hour
+    public String parseDates(String s){
+        //(\d*) grabs all numbers
+        Pattern p = Pattern.compile("(\\d*)");
+
+        //matching date numbers & hours only
+        Matcher m = p.matcher(s);
+        StringBuilder i = new StringBuilder();
+
+        while(m.find()){
+            i.append(m.group());
+        }
+        return i.toString();
+    }//return only fixed start date numbers
 
 }
