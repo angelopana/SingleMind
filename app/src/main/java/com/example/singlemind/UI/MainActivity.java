@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements IMainActivity{
     private Uri mPhotoUrl;
     private ProfileDrawerItem mProfileHeader;
     private Calendar mCalendar;
+    private Intent mIntent;
 
     //const
     private static final String TAG = "MainActivity";
@@ -190,8 +191,8 @@ public class MainActivity extends AppCompatActivity implements IMainActivity{
                                 result.closeDrawer();
                                 break;
                             case 2:
-                                ImportFragment importFragment = new ImportFragment();
-                                doNormalFragmentTransaction(importFragment, getString(R.string.fragmentImport), true);
+                                Intent importIntent = new Intent(MainActivity.this, ImportActivity.class);
+                                startActivity(importIntent);
                                 result.closeDrawer();
                                 break;
                             case 9:
@@ -302,5 +303,6 @@ public class MainActivity extends AppCompatActivity implements IMainActivity{
     public void setCalendarDate(Calendar calendar) {
             mCalendar = calendar;
     }
+
 }
 

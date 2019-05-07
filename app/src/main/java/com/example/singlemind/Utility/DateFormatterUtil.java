@@ -2,6 +2,8 @@ package com.example.singlemind.Utility;
 
 import android.util.Log;
 
+import com.google.api.client.util.DateTime;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,6 +14,19 @@ public class DateFormatterUtil {
 
     public DateFormatterUtil(){}
     private final static String TAG = "DateFormatterUtil";
+
+    public void getStartTimeFromDate(DateTime date) {
+
+        DateFormat output = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+
+        String start = output.format(date);
+
+
+        Log.i(TAG, "day and time of event is: " + start.toString());
+
+
+//        return outputStr;
+    }
 
     public String getTimeDate(Calendar cal) {
 
