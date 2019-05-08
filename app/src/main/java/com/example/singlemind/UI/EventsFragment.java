@@ -10,13 +10,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.applandeo.materialcalendarview.EventDay;
 import com.example.singlemind.Adapter.CalendarAdapter;
 import com.example.singlemind.Controllers.DBManager;
 import com.example.singlemind.Model.Event;
+import com.example.singlemind.Model.FlagEvent;
 import com.example.singlemind.R;
 import com.example.singlemind.Utility.DateFormatterUtil;
 import com.example.singlemind.Utility.EventBuilderUtil;
 import com.google.android.material.snackbar.Snackbar;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -126,6 +132,22 @@ public class EventsFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        EventBus.getDefault().register(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(FlagEvent event){
+        //retrieve info from dialog
+        Log.i(TAG, "Subscriber heard you loud and clear");
+        if (mCalendarAdapter.getItemCount() == 0 ) {
+            mCalendarRecycler.setVisibility(GONE);
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override

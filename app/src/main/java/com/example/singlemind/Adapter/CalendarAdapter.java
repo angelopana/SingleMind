@@ -9,10 +9,13 @@ import android.widget.TextView;
 
 import com.example.singlemind.Controllers.DBManager;
 import com.example.singlemind.Model.Event;
+import com.example.singlemind.Model.FlagEvent;
 import com.example.singlemind.R;
 import com.example.singlemind.UI.EventsFragment;
 import com.example.singlemind.UI.IUpdatable;
 import com.google.android.material.snackbar.Snackbar;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -88,6 +91,9 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.EventV
                                 //successfully deleted
                                 notifyItemRemoved(position);
                                 mRecyclerEvents.remove(position);
+                                //notify view
+                                EventBus.getDefault().post(new FlagEvent(true));
+
                                 Snackbar.make(view, "Item Removed", Snackbar.LENGTH_SHORT).show();
                             }
 

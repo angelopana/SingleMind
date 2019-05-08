@@ -206,8 +206,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     mEvents = (List<EventDay>) object;
                     //updateUI
                     mCalendarView.setEvents(mEvents);
-                    Log.i(TAG, "refreshed counters onEvent");
-                    //refreshCounters();
                 }
 
                 @Override

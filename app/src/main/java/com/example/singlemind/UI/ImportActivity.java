@@ -182,7 +182,7 @@ public class ImportActivity extends AppCompatActivity implements View.OnClickLis
                         startActivity(intent);
                     }
                     else {
-                        Toast.makeText(this, "Invalid dates- Events filtered", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Invalid file - try again", Toast.LENGTH_SHORT).show();
                     }
                 }
                 catch (IOException e) {
