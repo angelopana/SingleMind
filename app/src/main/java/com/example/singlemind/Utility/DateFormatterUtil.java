@@ -4,6 +4,9 @@ import android.util.Log;
 
 import com.google.api.client.util.DateTime;
 
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -48,6 +51,16 @@ public class DateFormatterUtil {
         return outputStr;
     }
 
+    public String getDatePickerDate(Calendar cal) {
+
+        Date timeDate = cal.getTime();
+        String outputStr = null;
+        DateFormat output = new SimpleDateFormat("MM/dd/yy");
+        outputStr = output.format(timeDate);
+
+        return outputStr;
+    }
+
     public String getFullDate(Calendar cal) {
         Date timeDate = cal.getTime();
         String outputStr = null;
@@ -77,5 +90,17 @@ public class DateFormatterUtil {
         }
 
         return cal;
+    }
+
+    public String fixDateFromGoogle(String date){
+
+        String pattern = "yyyy-MM-dd'T'HH:mm:ss.sssZ";
+        DateTimeFormatter dtf = DateTimeFormat.forPattern(pattern);
+        org.joda.time.DateTime dateTime = dtf.parseDateTime(date);
+
+        DateTimeFormatter dtfOut = DateTimeFormat.forPattern("MM/dd/yyyy hh:mm:ss");
+
+        String test = dtfOut.print(dateTime);
+        return test;
     }
 }

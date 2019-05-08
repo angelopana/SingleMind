@@ -1,4 +1,4 @@
-package com.example.singlemind.Controllers;
+package com.example.singlemind.Model;
 
 public class FlagEvent {
 

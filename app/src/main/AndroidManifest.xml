@@ -40,10 +40,15 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".UI.LoginActivity2"></activity>
-        <activity android:name=".UI.RegistrationActivity"></activity>
-        <activity android:name=".UI.MainActivity"></activity>
-        <activity android:name=".UI.ImportActivity"></activity>
+        <activity android:name=".UI.LoginActivity2"
+            android:configChanges="keyboardHidden|orientation">
+        </activity>
+        <activity android:name=".UI.RegistrationActivity"
+            android:configChanges="keyboardHidden|orientation"/>
+        <activity android:name=".UI.MainActivity"
+            android:configChanges="keyboardHidden|orientation"/>
+        <activity android:name=".UI.ImportActivity"
+            android:configChanges="keyboardHidden|orientation"/>
 
         <meta-data
             android:name="com.google.android.gms.version"

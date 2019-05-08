@@ -90,36 +90,44 @@ public class DBManager {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                String time = document.getString(DATE_KEY);
-                                int type = document.getLong(TYPE_KEY).intValue();
 
-                                Calendar cal;
-                                cal = new DateFormatterUtil().getCalDateFromString(time);
 
-                                switch (type) {
-                                    case 0:
-                                        mEvents.add(new EventDay(cal, R.drawable.ic_dot_blue_4dp));
-                                        break;
-                                    case 1:
-                                        mEvents.add(new EventDay(cal, R.drawable.ic_dot_green_4dp));
-                                        break;
-                                    case 2:
-                                        mEvents.add(new EventDay(cal, R.drawable.ic_dot_red_4dp));
-                                        break;
-                                    case 3:
-                                        mEvents.add(new EventDay(cal, R.drawable.ic_dot_yellow_4dp));
-                                        break;
-                                    case 4:
-                                        mEvents.add(new EventDay(cal, R.drawable.ic_dot_pink_4dp));
-                                        break;
-                                    case 6:
-                                        mEvents.add(new EventDay(cal, R.drawable.ic_dot_grey_4dp));
-                                        break;
-                                    default:
-                                        mEvents.add(new EventDay(cal, R.drawable.ic_dot_grey_4dp));
-                                        break;
+                                if (document.getString(DATE_KEY) != null) {
+
+                                    String time = document.getString(DATE_KEY);
+                                    int type = document.getLong(TYPE_KEY).intValue();
+
+                                    Calendar cal;
+                                    cal = new DateFormatterUtil().getCalDateFromString(time);
+
+                                    Calendar filterCal = Calendar.getInstance();
+
+                                    if (cal.getTimeInMillis() > filterCal.getTimeInMillis()) {
+                                        switch (type) {
+                                            case 0:
+                                                mEvents.add(new EventDay(cal, R.drawable.ic_dot_blue_4dp));
+                                                break;
+                                            case 1:
+                                                mEvents.add(new EventDay(cal, R.drawable.ic_dot_green_4dp));
+                                                break;
+                                            case 2:
+                                                mEvents.add(new EventDay(cal, R.drawable.ic_dot_red_4dp));
+                                                break;
+                                            case 3:
+                                                mEvents.add(new EventDay(cal, R.drawable.ic_dot_yellow_4dp));
+                                                break;
+                                            case 4:
+                                                mEvents.add(new EventDay(cal, R.drawable.ic_dot_pink_4dp));
+                                                break;
+                                            case 5:
+                                                mEvents.add(new EventDay(cal, R.drawable.ic_dot_grey_4dp));
+                                                break;
+                                            default:
+                                                mEvents.add(new EventDay(cal, R.drawable.ic_dot_grey_4dp));
+                                                break;
+                                        }
+                                    }
                                 }
-
                             }
 
                             iFiretoreObjectListener.onRetrievalSuccess(mEvents);
@@ -146,13 +154,17 @@ public class DBManager {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                String description = document.getString(DESCIRPTION_KEY);
-                                String title = document.getString(TITLE_KEY);
-                                String time = document.getString(DATE_KEY);
-                                int type = document.getLong(TYPE_KEY).intValue();
-                                long UID = (Long) document.get(UID_KEY);
 
-                                mRecyclerEvents.add(new Event(title, type, time, description, UID));
+                                if (document.getLong(TYPE_KEY) != null) {
+
+                                    String description = document.getString(DESCIRPTION_KEY);
+                                    String title = document.getString(TITLE_KEY);
+                                    String time = document.getString(DATE_KEY);
+                                    int type = document.getLong(TYPE_KEY).intValue();
+                                    long UID = (Long) document.get(UID_KEY);
+
+                                    mRecyclerEvents.add(new Event(title, type, time, description, UID));
+                                }
                             }
 
                             iFiretoreObjectListener.onRetrievalSuccess(mRecyclerEvents);
@@ -188,4 +200,5 @@ public class DBManager {
                     }
                 });
     }
+
 }

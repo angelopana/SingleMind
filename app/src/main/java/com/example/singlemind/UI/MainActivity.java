@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.example.singlemind.Controllers.DBManager;
 import com.example.singlemind.R;
 import com.example.singlemind.Utility.DateFormatterUtil;
 import com.google.android.material.bottomappbar.BottomAppBar;
@@ -36,6 +37,8 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
 import com.mikepenz.materialdrawer.util.DrawerImageLoader;
 import com.squareup.picasso.Picasso;
+
+import net.danlew.android.joda.JodaTimeAndroid;
 
 import java.util.Calendar;
 
@@ -78,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements IMainActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        JodaTimeAndroid.init(this);
 
         bottomAppBar = findViewById(R.id.bottom_app_bar);
         fab = findViewById(R.id.fab);
@@ -295,7 +299,6 @@ public class MainActivity extends AppCompatActivity implements IMainActivity{
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
         //updateUI(currentUser);
     }
 

@@ -29,6 +29,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import static android.view.View.GONE;
+
 public class EventsFragment extends Fragment implements View.OnClickListener {
 
     private List<Event> mRecyclerEvents = new ArrayList<>();
@@ -79,6 +81,10 @@ public class EventsFragment extends Fragment implements View.OnClickListener {
                 mRecyclerEvents = new EventBuilderUtil().getEventsByDay((List<Event>) object, mCalendar);
                 mCalendarAdapter = new CalendarAdapter(mRecyclerEvents);
                 mCalendarRecycler.setAdapter(mCalendarAdapter);
+
+                if (mCalendarAdapter.getItemCount() == 0 ) {
+                    mCalendarRecycler.setVisibility(GONE);
+                }
             }
 
             @Override
@@ -102,6 +108,9 @@ public class EventsFragment extends Fragment implements View.OnClickListener {
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
                 mRecyclerEvents.remove(viewHolder.getAdapterPosition());
                 mCalendarAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                if (mCalendarAdapter.getItemCount() == 0 ) {
+                    mCalendarRecycler.setVisibility(GONE);
+                }
             }
 
             @Override

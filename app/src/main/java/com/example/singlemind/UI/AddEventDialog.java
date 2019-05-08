@@ -12,10 +12,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.example.singlemind.Controllers.DBManager;
-import com.example.singlemind.Controllers.FlagEvent;
+import com.example.singlemind.Model.FlagEvent;
 import com.example.singlemind.Model.Event;
 import com.example.singlemind.R;
 import com.example.singlemind.Utility.DateFormatterUtil;
@@ -38,6 +39,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class AddEventDialog extends DialogFragment implements AdapterView.OnItemSelectedListener {
 
+    private TextView mTitle;
     private EditText mETTitle, mETDescription;
     private Button mBtnDatePicker, mBtnTimePicker, mSubmit;
     private TimePickerDialog mStartTimePicker;
@@ -50,6 +52,7 @@ public class AddEventDialog extends DialogFragment implements AdapterView.OnItem
     private FirebaseUser mUser;
     private FirebaseAuth mAuth;
     int mStartHour, mStartMin;
+    private Date now;
 
     private static final String TAG = "AddEventDialog";
     private static final String DIALOG_DATE = "DialogDate";
@@ -79,12 +82,18 @@ public class AddEventDialog extends DialogFragment implements AdapterView.OnItem
         mETDescription = view.findViewById(R.id.edit_event_description);
         mRootView = view.findViewById(android.R.id.content);
         mSpinner = view.findViewById(R.id.spinner_event_type);
+        mTitle = view.findViewById(R.id.text_add_event);
 
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
 
         sEvent = new Event();
+        sCal = Calendar.getInstance();
         final Calendar calendar = Calendar.getInstance();
+        now = calendar.getTime();
+
+        mBtnDatePicker.setText(new DateFormatterUtil().getDatePickerDate(calendar));
+        mBtnTimePicker.setText(new DateFormatterUtil().getTimeDate(calendar));
 
         mStartHour = calendar.get(Calendar.HOUR_OF_DAY);
         mStartMin = calendar.get(Calendar.MINUTE);
@@ -103,7 +112,7 @@ public class AddEventDialog extends DialogFragment implements AdapterView.OnItem
             @Override
             public void onClick(View v) {
                 FragmentManager manager = getFragmentManager();
-                DatePickerFragment dialog = DatePickerFragment.newInstance(new Date());
+                DatePickerFragment dialog = DatePickerFragment.newInstance(now);
                 dialog.setTargetFragment(AddEventDialog.this, REQUEST_DATE);
                 dialog.show(manager, DIALOG_DATE);
             }
@@ -125,9 +134,19 @@ public class AddEventDialog extends DialogFragment implements AdapterView.OnItem
                                 sCal.set(Calendar.SECOND, 0);
                                 sCal.set(Calendar.MILLISECOND, 0);
 
-                                mBtnTimePicker.setText(sFormatter.getTimeDate(sCal));
-                                sEvent.setmEventTime(sFormatter.getFullDate(sCal));
+                                Log.i(TAG, new DateFormatterUtil().getFullDate(sCal));
 
+                                Calendar calTest = Calendar.getInstance();
+                                if (sCal.getTimeInMillis() > calTest.getTimeInMillis()) {
+                                    mTitle.setText("Add Event");
+                                    mTitle.setTextSize(24);
+                                    mBtnTimePicker.setText(sFormatter.getTimeDate(sCal));
+                                    sEvent.setmEventTime(sFormatter.getFullDate(sCal));
+                                }
+                                else {
+                                    mTitle.setTextSize(20);
+                                    mTitle.setText("Invalid Time!!");
+                                }
                             }
                         }, mStartHour, mStartMin, false);
                 mStartTimePicker.show();
@@ -137,26 +156,48 @@ public class AddEventDialog extends DialogFragment implements AdapterView.OnItem
         mSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sEvent.setmEventName(mETTitle.getText().toString());
-                sEvent.setmEventDescription(mETDescription.getText().toString());
-                sEvent.setmEventUID(System.currentTimeMillis());
 
-                DBManager.getInstance().setEvent(sEvent, new IUpdatable() {
-                    @Override
-                    public void onUpdateSuccess() {
-                        Log.i(TAG, "Event stored to Firestore");
-                        EventBus.getDefault().post(new FlagEvent(true));
-                        dismiss();
+                Calendar calTest = Calendar.getInstance();
+                if (sCal.getTimeInMillis() > calTest.getTimeInMillis()) {
+                    mTitle.setText("Add Event");
+                    mTitle.setTextSize(24);
+
+                    if (!mETTitle.getText().toString().equals("")) {
+
+                        sEvent.setmEventName(mETTitle.getText().toString());
+                        sEvent.setmEventDescription(mETDescription.getText().toString());
+                        sEvent.setmEventUID(System.currentTimeMillis());
+
+                        DBManager.getInstance().setEvent(sEvent, new IUpdatable() {
+                            @Override
+                            public void onUpdateSuccess() {
+                                Log.i(TAG, "Event stored to Firestore");
+                                EventBus.getDefault().post(new FlagEvent(true));
+
+                                HomeFragment fragment = new HomeFragment();
+                                ((MainActivity) getActivity()).doNormalFragmentTransaction(fragment, getString(R.string.fragmentHome), false);
+                                dismiss();
+                            }
+
+                            @Override
+                            public void onUpdateFailed() {
+                                //notify the user
+                                Log.i(TAG, "Event failed to store to Firestore");
+                                Snackbar.make(v, R.string.event_error_on_storage, Snackbar.LENGTH_SHORT)
+                                        .show();
+                            }
+                        });
+                    }
+                    else {
+                        mTitle.setTextSize(20);
+                        mTitle.setText("Must add a title!!");
                     }
 
-                    @Override
-                    public void onUpdateFailed() {
-                        //notify the user
-                        Log.i(TAG, "Event failed to store to Firestore");
-                        Snackbar.make(v, R.string.event_error_on_storage, Snackbar.LENGTH_SHORT)
-                                .show();
-                    }
-                });
+                }
+                else {
+                    mTitle.setTextSize(20);
+                    mTitle.setText("Invalid Event Day/Time!!");
+                }
             }
         });
 
@@ -181,8 +222,19 @@ public class AddEventDialog extends DialogFragment implements AdapterView.OnItem
             sCal = (Calendar) data
                     .getSerializableExtra(DatePickerFragment.EXTRA_DATE);
 
-            mBtnDatePicker.setText(sFormatter.getDayDate(sCal));
-            sEvent.setmEventTime(sFormatter.getFullDate(sCal));
+            Calendar calTest = Calendar.getInstance();
+            if (sCal.getTimeInMillis() > calTest.getTimeInMillis()) {
+                mTitle.setText("Add Event");
+                mTitle.setTextSize(24);
+                mBtnDatePicker.setText(sFormatter.getDatePickerDate(sCal));
+                sEvent.setmEventTime(sFormatter.getFullDate(sCal));
+            }
+            else {
+                mTitle.setTextSize(20);
+                mTitle.setText("Invalid Date!!");
+            }
+
+
         }
     }
 
@@ -206,4 +258,5 @@ public class AddEventDialog extends DialogFragment implements AdapterView.OnItem
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
 }

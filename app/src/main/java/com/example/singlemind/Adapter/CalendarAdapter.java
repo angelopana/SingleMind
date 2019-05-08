@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.example.singlemind.Controllers.DBManager;
 import com.example.singlemind.Model.Event;
 import com.example.singlemind.R;
+import com.example.singlemind.UI.EventsFragment;
 import com.example.singlemind.UI.IUpdatable;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -18,6 +19,8 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import static android.view.View.GONE;
 
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.EventViewHolder>{
 
@@ -52,7 +55,10 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.EventV
     @Override
     public void onBindViewHolder(@NonNull CalendarAdapter.EventViewHolder holder, int position) {
         holder.mEventName.setText(mRecyclerEvents.get(position).getmEventName());
-        //holder.mEventType.setText(mRecyclerEvents.get(position).getmEventType());
+
+        String eventType = getEventType(mRecyclerEvents.get(position).getmEventType());
+        holder.mEventType.setText(eventType);
+
         holder.mEventTime.setText(mRecyclerEvents.get(position).getmEventTime());
         holder.mEventContent.setText(mRecyclerEvents.get(position).getmEventDescription());
 
@@ -75,12 +81,13 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.EventV
                     public void onClick(DialogInterface dialog, int which) {
                         //delete event
                         Event e = mRecyclerEvents.get(position);
+
                         DBManager.getInstance().deleteEvent(e, new IUpdatable() {
                             @Override
                             public void onUpdateSuccess() {
-                                //successfully deleted - remove from view
-                                mRecyclerEvents.remove(position);
+                                //successfully deleted
                                 notifyItemRemoved(position);
+                                mRecyclerEvents.remove(position);
                                 Snackbar.make(view, "Item Removed", Snackbar.LENGTH_SHORT).show();
                             }
 
@@ -109,4 +116,25 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.EventV
     public int getItemCount() {
         return mRecyclerEvents.size();
     }
+
+    private String getEventType(int position) {
+
+        switch(position) {
+            case 0:
+                return "Homework";
+            case 1:
+                return "Appointment";
+            case 2:
+                return "Gathering";
+            case 3:
+                return "Party";
+            case 4:
+                return "Birthday";
+            case 5:
+                return "Other";
+        }
+
+        return null;
+    }
+
 }

@@ -60,6 +60,7 @@ dependencies {
     implementation "androidx.annotation:annotation:1.0.2"
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.koushikdutta.ion:ion:2.+'
+    implementation 'net.danlew:android.joda:2.10.1.2'
 
     implementation("com.google.android.gms:play-services-gcm:12.0.1") {
         exclude group: "com.google.android.gms"

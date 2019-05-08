@@ -1,56 +1,42 @@
 package com.example.singlemind.Services;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.singlemind.Controllers.ICSManager;
 import com.example.singlemind.UI.ImportActivity;
-import com.example.singlemind.UI.LoginActivity;
 import com.example.singlemind.UI.MainActivity;
+import com.example.singlemind.UI.RegistrationActivity;
 import com.example.singlemind.Utility.DateFormatterUtil;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.client.util.DateTime;
-
 import com.google.api.services.calendar.model.*;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 /**
  * An asynchronous task that handles the Google Calendar API call.
  * Placing the API calls in their own task ensures the UI stays responsive.
- */
-
-/**
- * Created by miguel on 5/29/15.
- */
+**/
 
 public class ApiAsyncTask extends AsyncTask<Void, Void, Void> {
     private ImportActivity mActivity;
 
-    /**
-     * Constructor.
-     * @param activity MainActivity that spawned this task.
-     */
     public ApiAsyncTask(ImportActivity activity) {
         this.mActivity = activity;
     }
 
-    /**
-     * Background task to call Google Calendar API.
-     * @param params no parameters needed for this task.
-     */
     @Override
     protected Void doInBackground(Void... params) {
         try {
             mActivity.updateResultsText(getDataFromApi());
+            Intent intent = new Intent(mActivity, MainActivity.class);
+            mActivity.startActivity(intent);
 
         } catch (final GooglePlayServicesAvailabilityIOException availabilityException) {
 //            mActivity.showGooglePlayServicesAvailabilityErrorDialog(
@@ -68,11 +54,7 @@ public class ApiAsyncTask extends AsyncTask<Void, Void, Void> {
         return null;
     }
 
-    /**
-     * Fetch a list of the next 10 events from the primary calendar.
-     * @return List of Strings describing returned events.
-     * @throws IOException
-     */
+
     private List<String> getDataFromApi() throws IOException {
         // List the next 10 events from the primary calendar.
         DateTime now = new DateTime(System.currentTimeMillis());
@@ -95,79 +77,30 @@ public class ApiAsyncTask extends AsyncTask<Void, Void, Void> {
             //get start time
             DateTime start = event.getStart().getDateTime();
 
-            //format date.
-
             if (start == null) {
                 // All-day events don't have start times, so just use
                 // the start date.
                 start = event.getStart().getDate();
 
-                //fix date
             }
 
-            String fixedTime = fixDate(start.toString());
+            String fixedTime = new DateFormatterUtil().fixDateFromGoogle(start.toString());
 
             eventStrings.add(
-                    String.format("%s (%s)", event.getSummary(), start));
-
-            Log.i("ASYNC TASK  ", event.getSummary() + "  " + event.getDescription() + "  " + start);
+                    String.format("%s (%s)", event.getSummary(), fixedTime));
 
             e.setmEventName(event.getSummary());
             e.setmEventDescription(event.getDescription());
-            //e.setmEventTime(start);
+            e.setmEventTime(fixedTime);
             e.setmEventUID(System.currentTimeMillis());
-            e.setmEventType(6);
+            e.setmEventType(5);
             singlemindEvents.add(e);
         }
 
-        //now save count reference and save to firebase
-        //ICSManager.getInstance().saveEvents(singlemindEvents);
+        //now we save to firebase
+        ICSManager.getInstance().saveEvents(singlemindEvents);
 
         return eventStrings;
     }
-
-    private String fixDate(String d){
-
-        String fdate = "";
-        String newDate = null;
-        Date date = null;
-
-        //parsing the ics to reformt the date
-        fdate = parseDates(d);
-
-        //old format of parsed dates
-        String inputPattern = "yyyyMMddhhmmss";
-
-        //the new output format
-        String outputPattern = "MM/dd/yyyy hh:mm:ss";
-        SimpleDateFormat inputFormat = new SimpleDateFormat(inputPattern);
-        SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern);
-
-        //reformating the dates
-        try {
-
-            date = inputFormat.parse(fdate);
-            newDate = outputFormat.format(date);
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return newDate;
-    }//end of fixDate
-
-    //Parse ICS date to only use date & hour
-    public String parseDates(String s){
-        //(\d*) grabs all numbers
-        Pattern p = Pattern.compile("(\\d*)");
-
-        //matching date numbers & hours only
-        Matcher m = p.matcher(s);
-        StringBuilder i = new StringBuilder();
-
-        while(m.find()){
-            i.append(m.group());
-        }
-        return i.toString();
-    }//return only fixed start date numbers
 
 }

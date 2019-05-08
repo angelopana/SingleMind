@@ -20,10 +20,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.singlemind.Controllers.ICSManager;
 import com.example.singlemind.Model.Event;
 import com.example.singlemind.Services.ApiAsyncTask;
+import com.example.singlemind.Utility.DateFormatterUtil;
 import com.example.singlemind.Utility.ImportUtil;
 import com.example.singlemind.R;
 import com.google.android.gms.auth.api.Auth;
@@ -32,6 +35,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
@@ -167,8 +171,19 @@ public class ImportActivity extends AppCompatActivity implements View.OnClickLis
             if (resultData != null) {
                 uri = resultData.getData();
                 try {
+
                     mEvents = new ImportUtil().readTextFromUri(this, uri);
-                    ICSManager.getInstance().saveEvents(mEvents);
+                    java.util.Calendar cal = java.util.Calendar.getInstance();
+
+                    if (mEvents != null) {
+                        ICSManager.getInstance().saveEvents(mEvents);
+
+                        Intent intent = new Intent(this, MainActivity.class);
+                        startActivity(intent);
+                    }
+                    else {
+                        Toast.makeText(this, "Invalid dates- Events filtered", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 catch (IOException e) {
                     e.getStackTrace();
