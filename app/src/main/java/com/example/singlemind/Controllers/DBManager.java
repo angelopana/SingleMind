@@ -163,7 +163,14 @@ public class DBManager {
                                     int type = document.getLong(TYPE_KEY).intValue();
                                     long UID = (Long) document.get(UID_KEY);
 
-                                    mRecyclerEvents.add(new Event(title, type, time, description, UID));
+                                    Calendar cal;
+                                    cal = new DateFormatterUtil().getCalDateFromString(time);
+
+                                    Calendar filterCal = Calendar.getInstance();
+
+                                    if (cal.getTimeInMillis() > filterCal.getTimeInMillis()) {
+                                        mRecyclerEvents.add(new Event(title, type, time, description, UID));
+                                    }
                                 }
                             }
 

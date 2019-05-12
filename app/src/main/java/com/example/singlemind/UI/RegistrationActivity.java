@@ -139,6 +139,7 @@ public class RegistrationActivity extends AppCompatActivity {
             Toast.makeText(RegistrationActivity.this,
                     "Passwords do not match, try again.",
                     Toast.LENGTH_SHORT).show();
+            valid = false;
         }
 
         return valid;
