@@ -16,7 +16,7 @@
 
 TODO:
   
-  Adding parsing method to ImportUtil class
+  Adding parsing method to ImportUtil class (Angelo Completed)
   
   Add other Calendar Import option (Google Cal syncing, maybe FB and others)
   
